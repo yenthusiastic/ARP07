@@ -1,0 +1,39 @@
+---
+title: "Software Research"
+output: pdf_document
+---
+
+### Software research
+#### Python libraries
+##### For hardware components
+- *Spectrometers:* 
+- [DS3231 RTC module](https://github.com/switchdoclabs/RTC_SDL_DS3231), [Instruction](https://www.switchdoc.com/2014/08/raspberry-pi-python-library-ds3231/)
+- Stream camera: [OpenCV](https://docs.opencv.org/4.1.0/d6/d00/tutorial_py_root.html), numpy
+- [MTK3339 GPS module](https://github.com/PrzemoF/mtk3339)
+- [Neopixel](https://learn.adafruit.com/neopixels-on-raspberry-pi/python-usage) (for power indication and data status)
+##### For software components
+- [PyYAML](https://pyyaml.org/wiki/PyYAML): Parse config file in YAML format: 
+- OpenCV: Draw FoV circle of optical fiber on image
+- [Logger](https://docs.python.org/3/howto/logging.html)
+- GUI for application: 
+   -  Option 1 (simple): build native desktop GUI application using [Tkinter](https://docs.python.org/3/library/tk.html) (included in Python installtion).
+   -  Option 2 (advanced): build web app and use [pywebview](https://github.com/r0x0r/pywebview) wrapper to display app in GUI window.
+ 
+
+#### Configuration file
+- YAML file is a simple data structure based on key-value pairs that allows type parsing and hierarchical nodes, e.g: 
+```yml
+integer: 25
+string: "25"
+float: 25.0
+boolean: Yes
+parent_node:
+ - child_node1
+ - child_node2
+ etc.
+ ```
+Sample configuration data to set parameters for the spectrometers in the project could be as follows:
+```yml
+itegration_time: 1234
+acquisition_burst: 10
+ ```
