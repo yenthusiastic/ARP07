@@ -34,3 +34,17 @@ Sample configuration data to set parameters for the spectrometers in the project
 itegration_time: 1234
 acquisition_burst: 10
  ```
+- Configurations to consider
+   -  Directory of stored data
+   - Directory of log files
+   - Trigger button toggles
+     - camera_enable: Yes/No
+     - spectrometer1_enable: Yes/No
+     - spectrometer2_enable: Yes/No
+     - gps_enable: Yes/No
+     - real_time_enable: Yes/No
+   - Camera settings
+   - Spectral settings
+     - spectral_range
+     - integration_time
+     - acquisition_burst
