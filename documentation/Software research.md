@@ -1,8 +1,3 @@
----
-title: "Software Research"
-output: pdf_document
----
-
 ### Software research
 #### Python libraries
 ##### For hardware components

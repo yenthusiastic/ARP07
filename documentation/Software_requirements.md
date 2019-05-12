@@ -1,19 +1,25 @@
 ### Requirements for GUI application
 #### Functional requirements
 ##### The software shall be able to
-- Retrieve and display spectral data on touchscreen
+- Retrieve spectral data upon external trigger
+- Display spectral data on touchscreen
 - Retrieve and display GPS data on touchscreen
 - Retrieve and display date and time data on touchscreen
-- Retrieve and display battery percentage on touchscreen
+- Retrieve and display battery state of charge on touchscreen
 - Retrieve and display camera feed on touchscreen
 - Mark and display FoV of optical fiber on current camera frame
-- Detect and parse input configuration file from default USB device (volume labeled `INTERNAL`)
-- Detect and handle user's input from touchscreen
-- Store spectral data and corresponding captures on specified folder on default USB device
-- Detect and copy all stored spectral data and corresponding captures from default USB device (`INTERNAL`) to secondary USB devices (volume labels starting with `DATA`, e.g. `DATA1`, `DATA_2`, `DATA_new`, etc.)
+- Detect and parse configuration file from default USB device (volume labeled `INTERNAL`)
+- Detect and handle user input from touchscreen
+- Store spectral data and corresponding sensor data on specified folder on default USB device (`INTERNAL`)
+- Detect and copy all stored spectral data and corresponding sensor data from default USB device (`INTERNAL`) to secondary USB devices (volume labels starting with `DATA`, e.g. `DATA1`, `DATA_2`, `DATA_new`, etc.)
+- Indicate data storage activity through hardware LEDs
+- Stream GUI to the touchscreen over HDMI
+- Generate logs on default USB device (`INTERNAL`)  
 
 #### Non-functional requirements
-- The software shall be compatible for the intended OS platform (headless, read-only Raspbian).
-- The software shall be executed from a default USB device plugged into the Raspberry Pi.
-- The software shall be able to stream its GUI to the touchscreen over HDMI interface.
-- The application shall have a window size of 800x480 pixels.
+- The software shall be compatible with the intended OS platform (headless, read-only Raspbian).
+- The software shall be executed from a default USB device (volume labeled `INTERNAL`) plugged into the Raspberry Pi.
+- The software on the default USB device (`INTERNAL`) should be updated through an external USB device (volume labels starting with `DATA`)
+- The software shall have a window size of 800x480 pixels
+- The software should have a user-friendly interface
+
