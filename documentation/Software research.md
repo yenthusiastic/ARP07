@@ -16,9 +16,11 @@ output: pdf_document
 - OpenCV: Draw FoV circle of optical fiber on image
 - [Logger](https://docs.python.org/3/howto/logging.html)
 - GUI for application: 
-   -  Option 1 (simple): build native desktop GUI application using [Tkinter](https://docs.python.org/3/library/tk.html) (included in Python installtion).
-   -  Option 2 (advanced): build web app and use [pywebview](https://github.com/r0x0r/pywebview) wrapper to display app in GUI window.
- 
+   -  Option 1 (simple): build native GUI application using [Tkinter](https://docs.python.org/3/library/tk.html) (included in Python installtion).
+   -  Option 2 (medium): build native GUI app using [PyQt](https://pypi.org/project/PyQt5/) and Qt designer GUI app-builder
+   -  Option 3 (medium): build web app and use [pywebview](https://github.com/r0x0r/pywebview) wrapper to display app in GUI window.
+
+For now, option 2 is used as it comes with a GUI app builder (QtDesigner) that allows visualization of application layout.
 
 #### Configuration file
 - YAML file is a simple data structure based on key-value pairs that allows type parsing and hierarchical nodes, e.g: 
