@@ -1,0 +1,15 @@
+# install xinit
+sudo apt-get install xinit xserver-xorg
+
+# add startup script to openbox autostart
+sudo nano /home/pi/.config/openbox/autostart
+# and add :
+sudo python3 /home/pi/2_buttons.py 2> /home/pi/log.txt  &
+
+# start gui (startx) on boot, edit:
+sudo nano /home/pi/.bashrc
+# add the following to the end (if process not running start it)
+	pgrep "startx" > /dev/null || startx
+
+# edit raspi-config to boot into cli with auto login
+sudo raspi-config
