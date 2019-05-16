@@ -170,7 +170,6 @@ class window(Frame):
         '''Update User Count'''
         try:
             devices = subprocess.check_output("arp -ai wlan-ap", shell=True).decode().split("\n")
-            #devices = "HUAWEI_P9 (192.168.42.88) at <incomete> on wlan-ap\nNadjas-MBP (192.168.42.72) at <incomplete> on wlan-ap\nandroid-95f552005697899e (192.168.42.58) at 5c:70:a3:75:64:e2 [ether] on wlan-ap\n".split("\n")
             idx = 0
             flag_tmp = True
             self.device_box.configure(state='normal')
