@@ -11,7 +11,7 @@
 - Detect and read configuration file from default USB device (volume labeled `INTERNAL`)
 - Detect and handle user input from touchscreen
 - Store spectral data and corresponding sensor data on default USB device (`INTERNAL`)
-- Detect and copy all stored spectral data and corresponding sensor data from default USB device (`INTERNAL`) to secondary USB devices (volume labels starting with `DATA`, e.g. `DATA1`, `DATA_2`, `DATA_new`, etc.)
+- Detect and copy all stored spectral data and corresponding sensor data from default USB device (`INTERNAL`) to secondary USB devices (volumes starting with other labels)
 - Indicate data storage activity through hardware LEDs
 - Stream GUI to the touchscreen over HDMI
 - Generate logs on default USB device (`INTERNAL`)  
@@ -20,7 +20,7 @@
 #### Non-functional requirements
 - The software shall be compatible with the intended OS platform (headless, read-only Raspbian).
 - The software shall be executed from a default USB device (volume labeled `INTERNAL`) plugged into the Raspberry Pi.
-- The software on the default USB device (`INTERNAL`) should be updated through an external USB device (volume labels starting with `DATA`)
+- The software on the default USB device (`INTERNAL`) should be updated through an external USB device (volume starting with other labels)
 - The software shall have a window size of 800x480 pixels
 - The software should have a user-friendly interface
 
