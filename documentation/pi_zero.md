@@ -1,4 +1,9 @@
-
+## Fresh Installation
+**Files to change**
+ - /boot/config.txt  `(hdmi, serial, I2C)`
+ - /boot/ssh `(add his file so ssh is activated)`
+ - /rootfs/etc/dhcpcd.conf  `(set static IP)`
+ - /rootfs/etc/wpa_supplicant/wpa_supplicant.conf  `(WiFi network)`
 
 ### Notes
 Install full desktop on headless raspian-lite image:
