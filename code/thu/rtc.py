@@ -1,3 +1,4 @@
+# coding: utf-8
 # imports
 
 import sys
@@ -16,13 +17,12 @@ starttime = datetime.datetime.utcnow()
 ds3231 = SDL_DS3231.SDL_DS3231(1, 0x68)
 ds3231.write_now()
 
-# Main Loop – sleeps 10 minutes, then reads and prints values of all clocks
-
+# Main Loop – reads and prints values of RTC every 10 seconds
 while True:
 
-    current_time = datetime.datetime.utcnow()
+    currenttime = datetime.datetime.utcnow()
 
-    deltatime = current_time – starttime
+    deltatime = currenttime - starttime
 
     print('Raspberry Pi=\t' + time.strftime('%Y-%m-%d %H:%M:%S'))
 
