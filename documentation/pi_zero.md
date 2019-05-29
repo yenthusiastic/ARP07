@@ -5,6 +5,22 @@
  - /rootfs/etc/dhcpcd.conf  `(set static IP)`
  - /rootfs/etc/wpa_supplicant/wpa_supplicant.conf  `(WiFi network)`
 
+
+## Mounting
+### Make mount points
+```bash
+sudo mkdir /media/internal
+sudo mkdir /media/data
+sudo chown -R pi:pi /media/internal/
+sudo chown -R pi:pi /media/data
+```
+
+Find volume to mount:
+```bash
+sudo mount -o uid=pi,gid=pi/dev/sda /media/internal/
+```
+
+
 ### Notes
 Install full desktop on headless raspian-lite image:
 
