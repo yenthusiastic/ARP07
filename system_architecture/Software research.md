@@ -8,7 +8,7 @@
 - [Neopixel](https://learn.adafruit.com/neopixels-on-raspberry-pi/python-usage) (for power indication and data status)
 ##### For software components
 - [PyYAML](https://pyyaml.org/wiki/PyYAML): Parse config file in YAML format: 
-- OpenCV: Draw FoV circle of optical fiber on image
+- OpenCV: Grab camera frame and draw FoV circle of optical fiber on image
 - [Logger](https://docs.python.org/3/howto/logging.html)
 - GUI for application: 
    -  Option 1 (simple): build native GUI application using [Tkinter](https://docs.python.org/3/library/tk.html) (included in Python installtion).
@@ -16,6 +16,7 @@
    -  Option 3 (medium): build web app and use [pywebview](https://github.com/r0x0r/pywebview) wrapper to display app in GUI window.
 
 For now, option 2 is used as it comes with a GUI app builder (QtDesigner) that allows visualization of application layout.
+- [Matchbox Keyboard](https://www.modmypi.com/blog/matchbox-keyboard-raspberry-pi-touchscreen-keyboard) (Virtual Keyboard for Raspberry Pi): Required for user to input custom parameters for spectrometer settings.
 
 #### Configuration file
 - YAML file is a simple data structure based on key-value pairs that allows type parsing and hierarchical nodes, e.g: 
