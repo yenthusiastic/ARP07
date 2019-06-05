@@ -9,10 +9,10 @@ Components | mA Component | mA Total
  Pi Zero W, GUI, idle, no RF | 90 mA | 90 mA
  100% CPU load | 70 mA | 160 mA
  \+ USB Hub | 15 mA | 175 mA
- \+ 2 USB-Drives | 130 mA | 305 mA
- \+ Camera active | 135 mA | 440 mA
- \+ Monitor | 420 mA | 850 mA
-
+ \+ 2 USB-Drives | 125 mA | 300 mA
+ \+ Monitor | 470 mA | 770 mA
+ \+ Camera connected | 20 mA | 790 mA
+ \+ Camera active | 110 mA | 900 mA
 
 
 
