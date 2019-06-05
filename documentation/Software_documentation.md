@@ -41,3 +41,11 @@ This option causes more overhead and prevents support for code completion.
 pyuic5.exe gui.ui -o gui.py -x
 ```
 This option is a bit more inconvenient as the UI file has to be recompiled every time changes are made to the GUI design. However, code completion is supporrted with this method.
+
+### Threading in PyQt5 GUI app
+If threading is not used, trying to fetch data from other classes will cause following problems:
+- The main thread is locked
+- The GUI isn't updated until the process finishes
+- All GUI elements are no longer functional even though they appear to be.
+- No way to stop the execution once the function is started.
+Check [this tutorial](https://nikolak.com/pyqt-threading-tutorial/) for more info.
