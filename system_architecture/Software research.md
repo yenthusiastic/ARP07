@@ -18,6 +18,8 @@
 For now, option 2 is used as it comes with a GUI app builder (QtDesigner) that allows visualization of application layout.
 - [Matchbox Keyboard](https://www.modmypi.com/blog/matchbox-keyboard-raspberry-pi-touchscreen-keyboard) (Virtual Keyboard for Raspberry Pi): Required for user to input custom parameters for spectrometer settings.
 
+In order to change layout of the keyboard, follow instructions [here](https://www.raspberrypi.org/forums/viewtopic.php?t=122020).
+
 #### Configuration file
 - YAML file is a simple data structure based on key-value pairs that allows type parsing and hierarchical nodes, e.g: 
 ```yml
