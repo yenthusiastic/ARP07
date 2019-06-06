@@ -1,5 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtWidgets, uic
+from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from SpectrometerGUI import Ui_SpectrometerGUI
 from background_task_handler import get_RTC
 
@@ -21,13 +22,18 @@ class MainWindow(QtWidgets.QMainWindow):
         super(MainWindow, self).__init__()
         self.ui = Ui_SpectrometerGUI()
         self.ui.setupUi(self)
-        self.ui.start_btn.clicked.connect(self.set_datetime)
         self.ui.start_btn.clicked.connect(self.set_loc)
+        self.get_datetime()
+    
+    
+    def get_datetime(self):
         self.rtc_thread = get_RTC()
+        self.rtc_thread.time_updated.connect(self.update_time_label)
         self.rtc_thread.start()
     
-    def set_datetime(self):
-        self.ui.time_label.setText("Current date time: {}".format("test1"))
+    def update_time_label(self, time_str):
+        print('RTC time: %s' % time_str)
+        self.ui.time_label.setText("Current date time: {}".format(time_str))
         self.ui.time_label.adjustSize()
     
     def set_loc(self):
