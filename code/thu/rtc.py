@@ -2,7 +2,7 @@ from PyQt5.QtCore import QThread, pyqtSignal, pyqtSlot
 import sys
 import time
 import datetime
-import libs.SDL_DS3231 
+from libs.SDL_DS3231 import SDL_DS3231
 
 
 """ 
@@ -16,7 +16,7 @@ class RTC(QThread):
     time_updated = pyqtSignal(str, name='time_updated')
     def __init__(self):
         QThread.__init__(self)
-        self.ds3231 = SDL_DS3231.SDL_DS3231(1, self.default_I2C_addr)
+        self.ds3231 = SDL_DS3231(1, self.default_I2C_addr)
         self.ds3231.write_now()
         
 

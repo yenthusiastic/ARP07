@@ -21,7 +21,7 @@ Functions to be included, as defined in Software Architecture:
 [ ] +update_batt_status(): integer
 [ ] +save_data(): integer
 [ ] +export_config(): integer
-[+] +show_numpad(): void # show virtual keyboard (numpad) to enter configurations from touchscreen
+[+.] +show_numpad(): void # show virtual keyboard (numpad) to enter configurations from touchscreen
 NOTE: items with [X] means completed, [+] newly added, [.] on-going, [ ] to-do 
 """
 
@@ -62,6 +62,7 @@ class MainWindow(QtWidgets.QMainWindow):
     # function to show virtual keyboard (numpad) to enter configurations from touchscreen
     def show_numpad(self):
         os.system("matchbox-keyboard")
+        # TODO: this causes GUI to hang, have to put in a thread later
 
 def start_GUI():
     app = QtWidgets.QApplication(sys.argv)
