@@ -43,6 +43,7 @@ python3 configure.py
 make
 sudo make install
 ```
+Successfully built this on Pi Zero (06.06.2019)
 - Install python3-venv to create virtual environment and activate the virtual environment
 ```bash
 sudo apt-get install python3-venv
