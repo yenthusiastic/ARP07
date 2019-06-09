@@ -19,6 +19,7 @@ class GPS(QThread):
         # TODO: check mtk3999.py for example commands to initialize gps
 
     def __del__(self):
+        print("Stopping thread GPS")
         self.wait()
 
     def run(self):

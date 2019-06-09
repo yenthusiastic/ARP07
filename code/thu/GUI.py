@@ -1,11 +1,12 @@
 import sys
 import os
 from PyQt5 import QtCore, QtWidgets, uic
-from PyQt5.QtCore import pyqtSignal, pyqtSlot
+from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 from SpectrometerGUI import Ui_SpectrometerGUI
-#from RTC import RTC
+from RTC import RTC
 from GPS import GPS
 from background_task import *
+from status_led import batt_status_led
 
 
 """ 
@@ -34,12 +35,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.settings_btn.clicked.connect(self.show_numpad)
         self.get_datetime()
         self.get_gps()
+        self.show_batt_status()
     
-    
+    def __del__(self):
+        print("deleting Main Window")
+
+
     # function to execute a thread which constantly asks for real time
     def get_datetime(self):
-        self.rtc_thread = get_PC_time()
-        #self.rtc_thread = RTC()
+        #self.rtc_thread = get_PC_time()
+        self.rtc_thread = RTC()
         self.rtc_thread.time_updated.connect(self.show_datetime)
         self.rtc_thread.start()
 
@@ -48,6 +53,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.gps_thread = GPS()
         self.gps_thread.gps_updated.connect(self.show_location)
         self.gps_thread.start()
+
+    # function to execute a thread which constantly shows battery status on Neopixel LED
+    def show_batt_status(self):
+        self.status_led_thread = batt_status_led()
+        self.status_led_thread.led_off = False
+        self.status_led_thread.start()
+    
+    # function to switch off Neopixel LED and close all threads upon exit
+    def close_all_threads(self):
+        self.status_led_thread.led_off = True
+        self.status_led_thread.quit()
+        self.gps_thread.quit()
+        self.rtc_thread.quit()
     
     # function to display date time on GUI label time_label
     def show_datetime(self, time_str):
@@ -68,4 +86,8 @@ def start_GUI():
     app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()
+    app.aboutToQuit.connect(window.close_all_threads)
     sys.exit(app.exec_())
+
+
+

@@ -21,6 +21,7 @@ class RTC(QThread):
         
 
     def __del__(self):
+        print("Stopping thread RTC")
         self.wait()
 
     def run(self):
