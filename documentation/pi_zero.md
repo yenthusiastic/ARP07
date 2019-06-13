@@ -27,13 +27,18 @@ Components | mA Component | mA Total
 ### Current Image
 Download: [pizero_ARP_gui_compiled_20190613_shrunk.img](https://drive.google.com/drive/folders/1s-zRTGhcLGHEpJTI93D9O8YIeo6DgwfC) 3.6 GB
 
+## Flash Image on SD-Card
+[raspberrypi.org - Installing operating system images](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
+
+`sudo dd bs=4M if=pizero_ARP_gui_compiled_20190613_shrunk.img of=/dev/sde status=progress conv=fsync`
+
 ###  Re-Expand Root Partition on Raspberry Pi 
 
-sudo raspi-config --expand-rootfs
+`sudo raspi-config --expand-rootfs`
 
 ### Make Image of SD-Card
 [The PiHut - Backing up and Restoring your Raspberry Pi's SD Card](https://thepihut.com/blogs/raspberry-pi-tutorials/17789160-backing-up-and-restoring-your-raspberry-pis-sd-card)
-`sudo dd if=/dev/sde of=pizero_ARP_gui_compiled_20190613_full.img`
+`sudo dd if=/dev/sde of=pizero_ARP_gui_compiled_20190613_full.img status=progress conv=fsync`
 
 
 ### Shrink Image
