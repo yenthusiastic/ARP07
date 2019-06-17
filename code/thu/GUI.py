@@ -3,12 +3,12 @@ import os
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 from SpectrometerGUI import Ui_SpectrometerGUI
-from RTC import RTC
-from GPS import GPS
+#from RTC import RTC
+f#rom GPS import GPS
 from background_task import *
 from Camera import Camera
 import cv2
-from status_led import batt_status_led
+#from status_led import batt_status_led
 
 
 """ 
@@ -46,8 +46,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # initialize all background functions
         self.get_datetime()
         self.toggle_camera()
-        self.get_gps()
-        self.show_batt_status()
+        #self.get_gps()
+        #self.show_batt_status()
     
     # stop the GUI
     def __del__(self):
@@ -56,8 +56,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # function to execute a thread which constantly asks for real time
     def get_datetime(self):
-        #self.rtc_thread = get_PC_time()
-        self.rtc_thread = RTC()
+        self.rtc_thread = get_PC_time()
+        #self.rtc_thread = RTC()
         self.rtc_thread.time_updated.connect(self.show_datetime)
         self.rtc_thread.start()
 

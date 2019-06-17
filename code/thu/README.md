@@ -7,16 +7,16 @@
 Make sure all libraries are installed for the GUI to function properly.
 - In current folder, run `sudo python3 main.py` to launch the GUI app.
 #### GUI app manual
-(image with details to be addded)
+![GUI_screencap](../../media/GUI_screencap170619_1.PNG)
 ##### Touch buttons
 - **Start/Stop** toggle button
   - Start: Run the data collection from hyperstrectral sensors
   - Stop: Stop the data collection from hyperstrectral sensors
-- **Camera** toggle button
+- **Camera on/Camera off** toggle button
   - Enable/ disable camera preview
 - **Settings** button
+  - Show a pop up window to edit configurations
 ... (more to be added and explained)
-##### Viewport
 ##### LED indicators
 - Battery LED indicator
    - Red: battery critical
