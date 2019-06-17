@@ -12,6 +12,7 @@ NOTE: items with [X] means completed, [+] newly added, [.] on-going, [ ] to-do
 
 class GPS(QThread):
     default_serial_port = "/dev/tty/ACM0" #example default serial port
+    #pyqtSignal to store GPS data of this thread to be emitted during running
     gps_updated = pyqtSignal(str, name='gps_updated')
     def __init__(self):
         QThread.__init__(self)
@@ -27,5 +28,7 @@ class GPS(QThread):
             # using dummy data for now
             # TODO: add function to read correct GPS data
             gps_str = "51.2345, 60.9876" 
+
+            # emit GPS data to the GUI thread that is calling this thread
             self.gps_updated.emit(str(gps_str))
             time.sleep(1.0)

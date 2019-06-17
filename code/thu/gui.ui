@@ -16,42 +16,15 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>20</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Spectrometer GUI</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGraphicsView" name="viewport">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>90</y>
-      <width>500</width>
-      <height>300</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="cursor" stdset="0">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>210</x>
-      <y>170</y>
-      <width>201</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Frame capture from camera</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="camera_btn">
     <property name="geometry">
      <rect>
@@ -210,7 +183,7 @@
      <rect>
       <x>15</x>
       <y>45</y>
-      <width>193</width>
+      <width>511</width>
       <height>35</height>
      </rect>
     </property>
@@ -235,10 +208,28 @@
      <enum>Qt::RightToLeft</enum>
     </property>
     <property name="text">
-     <string>GPS location:</string>
+     <string>GPS location: 51.4910482, 6.5350449</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="cam_label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>261</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>18</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Camera disabled.</string>
     </property>
    </widget>
   </widget>
