@@ -47,11 +47,34 @@ class batt_status_led(QThread):
         self.pixels.show()
 
 """ 
+Class to check for battery status in the background to prevent freezing of GUI
+[+] +batt_status()
+NOTE: items with [X] means completed, [+] newly added, [.] on-going, [ ] to-do 
+"""
+
+class batt_status(QThread):
+    batt_status = 1
+
+    def __init__(self):
+        QThread.__init__(self)   
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
+        while True:
+            #TODO: ask for battery status here
+            # for now generating random integers between -1, 0, 1
+            self.batt_status = randint(-1, 1)
+            # print(self.batt_status)
+            time.sleep(3.0)
+
+
+""" 
 Class to initialize and display 2nd Neopixel as data status indicator in the background to prevent freezing of GUI
 [+] +data_status_led()
 NOTE: items with [X] means completed, [+] newly added, [.] on-going, [ ] to-do 
 """
-
 class data_status_led(QThread):
     digital_pin = board.D23 # the pin number that Neopixel is connected to Pi
     num_pixels = 1    # number of Neopixels in a strip (if applicable)
@@ -85,26 +108,5 @@ class data_status_led(QThread):
         self.pixels.fill((0,0,0))
         self.pixels.show()
 
-""" 
-Class to check for battery status in the background to prevent freezing of GUI
-[+] +batt_status()
-NOTE: items with [X] means completed, [+] newly added, [.] on-going, [ ] to-do 
-"""
 
-class batt_status(QThread):
-    batt_status = 1
-
-    def __init__(self):
-        QThread.__init__(self)   
-
-    def __del__(self):
-        self.wait()
-
-    def run(self):
-        while True:
-            #TODO: ask for battery status here
-            # for now generating random integers between -1, 0, 1
-            self.batt_status = randint(-1, 1)
-            # print(self.batt_status)
-            time.sleep(3.0)
             

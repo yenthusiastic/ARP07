@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\gui.ui'
+# Form implementation generated from reading ui file 'gui.ui'
 #
 # Created by: PyQt5 UI code generator 5.11.3
 #
@@ -40,15 +40,18 @@ class Ui_SpectrometerGUI(object):
         self.camera_btn.setSizePolicy(sizePolicy)
         self.camera_btn.setMinimumSize(QtCore.QSize(150, 40))
         font = QtGui.QFont()
-        font.setPointSize(20)
+        font.setPointSize(17)
         self.camera_btn.setFont(font)
         self.camera_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.camera_btn.setDefault(False)
+        self.camera_btn.setFlat(False)
+        self.camera_btn.setProperty("pressed", False)
         self.camera_btn.setObjectName("camera_btn")
         self.spect_btn = QtWidgets.QPushButton(self.centralwidget)
         self.spect_btn.setGeometry(QtCore.QRect(540, 170, 150, 60))
         self.spect_btn.setMinimumSize(QtCore.QSize(150, 40))
         font = QtGui.QFont()
-        font.setPointSize(20)
+        font.setPointSize(19)
         self.spect_btn.setFont(font)
         self.spect_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.spect_btn.setObjectName("spect_btn")
@@ -126,7 +129,7 @@ class Ui_SpectrometerGUI(object):
         _translate = QtCore.QCoreApplication.translate
         SpectrometerGUI.setWindowTitle(_translate("SpectrometerGUI", "Spectrometer GUI"))
         self.label.setText(_translate("SpectrometerGUI", "Frame capture from camera"))
-        self.camera_btn.setText(_translate("SpectrometerGUI", "Camera"))
+        self.camera_btn.setText(_translate("SpectrometerGUI", "Camera off"))
         self.spect_btn.setText(_translate("SpectrometerGUI", "Spectrum"))
         self.settings_btn.setText(_translate("SpectrometerGUI", "Settings"))
         self.start_btn.setText(_translate("SpectrometerGUI", "Start"))
@@ -135,4 +138,14 @@ class Ui_SpectrometerGUI(object):
         self.menuFile.setTitle(_translate("SpectrometerGUI", "File"))
         self.config_action.setText(_translate("SpectrometerGUI", "Load configurations"))
         self.ref_action.setText(_translate("SpectrometerGUI", "Preferences"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    SpectrometerGUI = QtWidgets.QMainWindow()
+    ui = Ui_SpectrometerGUI()
+    ui.setupUi(SpectrometerGUI)
+    SpectrometerGUI.show()
+    sys.exit(app.exec_())
 

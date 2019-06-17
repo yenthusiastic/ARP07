@@ -30,7 +30,7 @@ make
 sudo make install
 ```
 ##### Installing additional libraries:
-  - Adafruit Neopixel library `pip3 install rpi_ws281x adafruit-circuitpython-neopixel`
+- Adafruit Neopixel library `pip3 install rpi_ws281x adafruit-circuitpython-neopixel`
 #### Running the app
 - In current folder, run `sudo python3 main.py` to launch the GUI app.
 #### GUI app manual

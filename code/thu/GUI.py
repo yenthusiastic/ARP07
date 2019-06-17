@@ -3,10 +3,12 @@ import os
 from PyQt5 import QtCore, QtWidgets, uic
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 from SpectrometerGUI import Ui_SpectrometerGUI
-from RTC import RTC
-from GPS import GPS
+#from RTC import RTC
+#from GPS import GPS
 from background_task import *
-from status_led import batt_status_led
+from Camera import Camera
+import cv2
+#from status_led import batt_status_led
 
 
 """ 
@@ -17,9 +19,9 @@ Functions to be included, as defined in Software Architecture:
 [.] +touch_event_listener(): integer
 [ ] +hardware_trigger_listener(): integer
 [ ] +display_frame_with_FoV(): integer
-[ ] +show_location(): integer
+[.] +show_location(): integer
 [X] +show_datetime(): integer --> : void
-[ ] +update_batt_status(): integer
+[.] +update_batt_status(): integer
 [ ] +save_data(): integer
 [ ] +export_config(): integer
 [+.] +show_numpad(): void # show virtual keyboard (numpad) to enter configurations from touchscreen
@@ -27,15 +29,19 @@ NOTE: items with [X] means completed, [+] newly added, [.] on-going, [ ] to-do
 """
 
 class MainWindow(QtWidgets.QMainWindow):
+    camera_on = True
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = Ui_SpectrometerGUI()
         self.ui.setupUi(self)
         # attach action show_numpad() to Settings button when clicked
         self.ui.settings_btn.clicked.connect(self.show_numpad)
+        # attach action stop_camera() to Camera button when clicked
+        self.ui.camera_btn.clicked.connect(self.toggle_camera)
         self.get_datetime()
-        self.get_gps()
-        self.show_batt_status()
+        self.toggle_camera()
+        #self.get_gps()
+        #self.show_batt_status()
     
     def __del__(self):
         print("deleting Main Window")
@@ -43,8 +49,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # function to execute a thread which constantly asks for real time
     def get_datetime(self):
-        #self.rtc_thread = get_PC_time()
-        self.rtc_thread = RTC()
+        self.rtc_thread = get_PC_time()
+        #self.rtc_thread = RTC()
         self.rtc_thread.time_updated.connect(self.show_datetime)
         self.rtc_thread.start()
 
@@ -59,6 +65,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.status_led_thread = batt_status_led()
         self.status_led_thread.led_off = False
         self.status_led_thread.start()
+
     
     # function to switch off Neopixel LED and close all threads upon exit
     def close_all_threads(self):
@@ -76,6 +83,19 @@ class MainWindow(QtWidgets.QMainWindow):
     def show_location(self, gps_str):
         self.ui.gps_label.setText("GPS location: {}".format(gps_str))
         self.ui.gps_label.adjustSize()
+
+    # function to display camera frame on GUI viewport element
+    def toggle_camera(self):
+        if self.camera_on:
+            self.camera_thread = Camera()
+            self.camera_thread.camera_on = True
+            self.camera_thread.start()
+            self.ui.camera_btn.setText("Camera off")     
+        else: 
+            self.ui.camera_btn.setText("Camera on") 
+            self.camera_thread.camera_on = False
+        self.camera_on = not self.camera_on
+        
 
     # function to show virtual keyboard (numpad) to enter configurations from touchscreen
     def show_numpad(self):

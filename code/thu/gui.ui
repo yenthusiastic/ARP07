@@ -75,14 +75,23 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <pointsize>17</pointsize>
      </font>
     </property>
     <property name="cursor">
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="text">
-     <string>Camera</string>
+     <string>Camera off</string>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <property name="pressed" stdset="0">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="spect_btn">
@@ -102,7 +111,7 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <pointsize>19</pointsize>
      </font>
     </property>
     <property name="cursor">
