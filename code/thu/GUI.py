@@ -3,12 +3,12 @@ import os
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 from SpectrometerGUI import Ui_SpectrometerGUI
-#from RTC import RTC
-f#rom GPS import GPS
+from RTC import RTC
+from GPS import GPS
 from background_task import *
-from Camera import Camera
-import cv2
-#from status_led import batt_status_led
+#from Camera import Camera
+#import cv2
+from status_led import batt_status_led
 
 
 """ 
@@ -41,13 +41,13 @@ class MainWindow(QtWidgets.QMainWindow):
         # attach action show_numpad() to Settings button when clicked
         self.ui.settings_btn.clicked.connect(self.show_numpad)
         # attach action toggle_camera() to Camera button when clicked
-        self.ui.camera_btn.clicked.connect(self.toggle_camera)
+        #self.ui.camera_btn.clicked.connect(self.toggle_camera)
 
         # initialize all background functions
         self.get_datetime()
-        self.toggle_camera()
-        #self.get_gps()
-        #self.show_batt_status()
+        #self.toggle_camera()
+        self.get_gps()
+        self.show_batt_status()
     
     # stop the GUI
     def __del__(self):
@@ -56,8 +56,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # function to execute a thread which constantly asks for real time
     def get_datetime(self):
-        self.rtc_thread = get_PC_time()
-        #self.rtc_thread = RTC()
+        #self.rtc_thread = get_PC_time()
+        self.rtc_thread = RTC()
         self.rtc_thread.time_updated.connect(self.show_datetime)
         self.rtc_thread.start()
 
@@ -90,7 +90,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     # function to display GPS location on GUI label gps_label
     def show_location(self, gps_str):
-        self.ui.gps_label.setText("GPS location: {}".format(gps_str))
+        self.ui.gps_label.setText(gps_str)
         self.ui.gps_label.adjustSize()
 
 
@@ -120,8 +120,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # function to show virtual keyboard (numpad) to enter configurations from touchscreen
     def show_numpad(self):
-        os.system("matchbox-keyboard")
         # TODO: this causes GUI to hang, have to put in a thread later
+        os.system("matchbox-keyboard")
+        
+        
 
 def start_GUI():
     app = QtWidgets.QApplication(sys.argv)

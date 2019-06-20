@@ -1,8 +1,8 @@
-## Instructions for making OS image and run GUI app
+## Instructions for cloning OS image and run GUI app
 Most current image available on [Google Drive](https://drive.google.com/drive/u/0/folders/1s-zRTGhcLGHEpJTI93D9O8YIeo6DgwfC).
 
 ### Image version log
-- Build 13.06.19: Raspian + PyQt5
+- Build 13.06.19: Raspian + PyQt5. 
 
 
 ### Flash OS Image on SD-Card
@@ -24,10 +24,11 @@ The root partition should now take the whole SD card volume
 ![fs screenshot](../media/fs_screencap.png)
 
 ### Test GUI application
+Get the zipped Source Code version 130619 from https://github.com/yenthusiastic/ARP07/tags
+Extract the zip file and run the GUI
 ```bash
-cd              # go to home
-cd Documents/ARP07/code/thu
+cd ARP07-b130619
 sudo python3 main.py        #sudo is required to control GPIO pins
 ```
-Current GUI looks like follows
+GUI of version 130619 looks like follows
 ![GUI screenshot](../media/GUI_screencap.png)
