@@ -38,9 +38,8 @@ class GPS(QThread):
                 print('Waiting for GPS data...')
                 gps_str = 'Waiting for GPS data...'
                 self.gps_updated.emit(str(gps_str))
-                continue 
             else:
                 gps_str = "GPS location: ({:.5f}, {:.5f})".format(self.gps.latitude, self.gps.longitude)
                 # emit GPS data to the GUI thread that is calling this thread
                 self.gps_updated.emit(str(gps_str))
-            time.sleep(1.0)
+            time.sleep(5.0)

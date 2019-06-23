@@ -125,7 +125,7 @@ class Ui_SpectrometerGUI(object):
     def retranslateUi(self, SpectrometerGUI):
         _translate = QtCore.QCoreApplication.translate
         SpectrometerGUI.setWindowTitle(_translate("SpectrometerGUI", "Spectrometer GUI"))
-        self.camera_btn.setText(_translate("SpectrometerGUI", "Camera off"))
+        self.camera_btn.setText(_translate("SpectrometerGUI", "Capture"))
         self.spect_btn.setText(_translate("SpectrometerGUI", "Spectrum"))
         self.settings_btn.setText(_translate("SpectrometerGUI", "Settings"))
         self.start_btn.setText(_translate("SpectrometerGUI", "Start"))

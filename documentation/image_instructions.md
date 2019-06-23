@@ -6,9 +6,12 @@ Most current image available on [Google Drive](https://drive.google.com/drive/u/
 
 
 ### Flash OS Image on SD-Card
+#### On Linux
 [raspberrypi.org - Installing operating system images](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
 
 `sudo dd bs=4M if=pizero_ARP_gui_compiled_20190613_shrunk.img of=/dev/sde status=progress conv=fsync`
+#### On Windows:
+Install [Rufus](https://rufus.ie/) or use the portable executable to flash the image. (tested working)
 
 ###  Re-Expand Root Partition on Raspberry Pi 
 

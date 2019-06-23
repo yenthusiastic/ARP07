@@ -5,9 +5,8 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 from SpectrometerGUI import Ui_SpectrometerGUI
 from RTC import RTC
 from GPS import GPS
-from background_task import *
-#from Camera import Camera
-#import cv2
+from Camera import Camera
+import os
 from status_led import batt_status_led
 
 
@@ -29,7 +28,6 @@ NOTE: items with [X] means completed, [+] newly added, [-] removed, [.] on-going
 """
 
 class MainWindow(QtWidgets.QMainWindow):
-    camera_on = True   # boolean to store toggle status of camera
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = Ui_SpectrometerGUI()
@@ -41,11 +39,10 @@ class MainWindow(QtWidgets.QMainWindow):
         # attach action show_numpad() to Settings button when clicked
         self.ui.settings_btn.clicked.connect(self.show_numpad)
         # attach action toggle_camera() to Camera button when clicked
-        #self.ui.camera_btn.clicked.connect(self.toggle_camera)
+        self.ui.camera_btn.clicked.connect(self.toggle_camera)
 
         # initialize all background functions
         self.get_datetime()
-        #self.toggle_camera()
         self.get_gps()
         self.show_batt_status()
     
@@ -76,9 +73,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
     # function to switch off Neopixel LED and close all threads upon exit
     def close_all_threads(self):
-        self.status_led_thread.led_off = True
-        self.camera_thread.camera_on = False
-        self.camera_thread.quit()
+        self.status_led_thread.led_off = True        
         self.status_led_thread.quit()
         self.gps_thread.quit()
         self.rtc_thread.quit()
@@ -96,18 +91,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # function to toggle camera display on GUI
     def toggle_camera(self):
-        if self.camera_on:
-            self.camera_thread = Camera()
-            self.camera_thread.camera_on = True
-            self.camera_thread.frame_updated.connect(self.display_frame)
-            self.camera_thread.start()
-            self.ui.camera_btn.setText("Camera off")     
-        else: 
-            self.ui.camera_btn.setText("Camera on") 
-            self.camera_thread.camera_on = False
-            self.ui.cam_label.setText("Camera disabled")
-            self.ui.cam_label.update()
-        self.camera_on = not self.camera_on
+        self.ui.cam_label.setText("Capturing camera frame. Please wait...")
+        self.camera_thread = Camera()
+        self.camera_thread.frame_updated.connect(self.display_frame)
+        self.camera_thread.start()
+        self.camera_thread.quit()     
 
     # function to display camera frame on GUI viewport element
     def display_frame(self, frame):
@@ -121,7 +109,7 @@ class MainWindow(QtWidgets.QMainWindow):
     # function to show virtual keyboard (numpad) to enter configurations from touchscreen
     def show_numpad(self):
         # TODO: this causes GUI to hang, have to put in a thread later
-        os.system("matchbox-keyboard")
+        MBKeyboard().start()
         
         
 
@@ -133,4 +121,13 @@ def start_GUI():
     sys.exit(app.exec_())
 
 
+class MBKeyboard(QThread):
+    def __init__(self):
+        QThread.__init__(self)
+
+    def __del__(self):
+        self.wait()
+    
+    def run(self):
+        os.system("matchbox-keyboard")
 
