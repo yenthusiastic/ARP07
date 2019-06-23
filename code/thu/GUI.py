@@ -3,6 +3,7 @@ import os
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 from SpectrometerGUI import Ui_SpectrometerGUI
+from SettingsUI import Ui_Settings
 from RTC import RTC
 from GPS import GPS
 from Camera import Camera
@@ -36,8 +37,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.cam_label.resize(500,300)
         self.ui.cam_label.show() 
 
-        # attach action show_numpad() to Settings button when clicked
-        self.ui.settings_btn.clicked.connect(self.show_numpad)
+        # attach action show_settings() to Settings button when clicked
+        self.ui.settings_btn.clicked.connect(self.show_settings)
         # attach action toggle_camera() to Camera button when clicked
         self.ui.camera_btn.clicked.connect(self.toggle_camera)
 
@@ -45,6 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.get_datetime()
         self.get_gps()
         self.show_batt_status()
+        self.dialogs = list()
     
     # stop the GUI
     def __del__(self):
@@ -107,9 +109,12 @@ class MainWindow(QtWidgets.QMainWindow):
         
 
     # function to show virtual keyboard (numpad) to enter configurations from touchscreen
-    def show_numpad(self):
-        # TODO: this causes GUI to hang, have to put in a thread later
-        MBKeyboard().start()
+    def show_settings(self):
+        # NOTE: The Keyboard does not work very well when executed from GUI, better use the bash executable from Desktop
+        #MBKeyboard().start()
+        widget = SettingsWindow()
+        self.dialogs.append(widget)
+        widget.show()
         
         
 
@@ -131,3 +136,10 @@ class MBKeyboard(QThread):
     def run(self):
         os.system("matchbox-keyboard")
 
+
+
+class SettingsWindow(QtWidgets.QMainWindow):
+    def __init__(self):
+        super(SettingsWindow, self).__init__()
+        self.ui = Ui_Settings()
+        self.ui.setupUi(self)

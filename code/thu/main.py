@@ -17,6 +17,3 @@ NOTE: items with [X] means completed, [+] newly added, [.] on-going, [ ] to-do
 if __name__ == "__main__":
     start_GUI()  #call start_GUI() method from GUI.py to fire GUI
     #TODO: add remaining functions: detect_USB_drive(), update_software(), update_configs()
-    while True:
-        print("hello")
-        time.sleep(1)
