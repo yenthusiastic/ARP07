@@ -25,11 +25,17 @@ class Camera(QThread):
 
     def run(self):
         os.system("python2 capture_frame.py")
-        img = Image.open(img_name)
-        img.load()
-        data = np.asarray(img)
-        # emit camera frame to the GUI thread that is calling this thread
-        self.frame_updated.emit(data)
+        try:
+            img = Image.open(img_name)
+            img.load()
+            data = np.asarray(img)
+             # emit camera frame to the GUI thread that is calling this thread
+            self.frame_updated.emit(data)
+        except:
+            print("Unable to load ", img_name)
+            self.frame_updated.emit(None)
+            
+       
         
     
         

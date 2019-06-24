@@ -4,11 +4,15 @@ from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 from SpectrometerGUI import Ui_SpectrometerGUI
 from SettingsUI import Ui_Settings
-from RTC import RTC
-from GPS import GPS
-from Camera import Camera
 import os
-from status_led import batt_status_led
+from background_task import *
+#enable following imports if RTC, GPS, Camera, Trigger, Neopixel are available
+#from RTC import RTC
+#from GPS import GPS
+#from Camera import Camera
+#from Trigger import trigger_reader
+#from status_led import batt_status_led
+
 
 
 """ 
@@ -16,15 +20,15 @@ Class to render main GUI for application to display data and handle touchscreen 
 Functions to be included, as defined in Software Architecture:
 [X] +initialize(): integer --> __init__(): void
 [X] +render_GUI_layout(): integer --> start_GUI(): void
-[-] +touch_event_listener(): integer  --> included in __init__()
-[ ] +hardware_trigger_listener(): integer
-[.] +display_frame_with_FoV(): integer  --> display_frame(): void
-[.] +show_location(): integer --> : void
+[X] +touch_event_listener(): integer  --> included in __init__()
+[X] +hardware_trigger_listener(): integer --> get_trigger_state(): void
+[X] +display_frame_with_FoV(): integer  --> display_frame(): void
+[X] +show_location(): integer --> : void
 [X] +show_datetime(): integer --> : void
-[.] +update_batt_status(): integer --> show_batt_status(): void
+[X] +update_batt_status(): integer --> show_batt_status(): void
 [ ] +save_data(): integer
 [ ] +export_config(): integer
-[+.] +show_numpad(): void # show virtual keyboard (numpad) to enter configurations from touchscreen
+[+] +show_numpad(): void # show virtual keyboard (numpad) to enter configurations from touchscreen
 NOTE: items with [X] means completed, [+] newly added, [-] removed, [.] on-going, [ ] to-do 
 """
 
@@ -37,16 +41,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.cam_label.resize(500,300)
         self.ui.cam_label.show() 
 
+        # initialize list of all child dialogs 
+        self.dialogs = list()
+
         # attach action show_settings() to Settings button when clicked
         self.ui.settings_btn.clicked.connect(self.show_settings)
         # attach action toggle_camera() to Camera button when clicked
-        self.ui.camera_btn.clicked.connect(self.toggle_camera)
+        # uncomment following if camera is available 
+        # self.ui.camera_btn.clicked.connect(self.toggle_camera)
 
         # initialize all background functions
         self.get_datetime()
-        self.get_gps()
-        self.show_batt_status()
-        self.dialogs = list()
+
+        # uncomment following lines if GPS, Neopixel, Trigger are available
+        #self.get_gps()
+        #self.show_batt_status()
+        #self.get_trigger_state()
     
     # stop the GUI
     def __del__(self):
@@ -55,8 +65,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # function to execute a thread which constantly asks for real time
     def get_datetime(self):
-        #self.rtc_thread = get_PC_time()
-        self.rtc_thread = RTC()
+        self.rtc_thread = get_PC_time()  #use PC time, comment if RTC available
+        #self.rtc_thread = RTC()         #uncomment if RTC available
         self.rtc_thread.time_updated.connect(self.show_datetime)
         self.rtc_thread.start()
 
@@ -101,11 +111,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # function to display camera frame on GUI viewport element
     def display_frame(self, frame):
-        height, width, channel = frame.shape
-        bytesPerLine = 3 * width
-        img = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
-        self.ui.cam_label.setPixmap(QtGui.QPixmap(img))
-        self.ui.cam_label.show() 
+        if frame is not None:
+            height, width, channel = frame.shape
+            bytesPerLine = 3 * width
+            img = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
+            self.ui.cam_label.setPixmap(QtGui.QPixmap(img))
+            self.ui.cam_label.show() 
+        else: 
+            self.ui.cam_label.setText("Camera not available")
         
 
     # function to show virtual keyboard (numpad) to enter configurations from touchscreen
@@ -117,6 +130,12 @@ class MainWindow(QtWidgets.QMainWindow):
         widget.show()
         
         
+    # function to read trigger state 
+    def get_trigger_state(self):
+        self.trigger_thread = trigger_reader()
+        self.trigger_thread.trigger_updated.connect(self.show_settings)
+        self.trigger_thread.start()
+
 
 def start_GUI():
     app = QtWidgets.QApplication(sys.argv)
@@ -126,6 +145,7 @@ def start_GUI():
     sys.exit(app.exec_())
 
 
+# class to display virtual keyboard (numpad) for touchscreen
 class MBKeyboard(QThread):
     def __init__(self):
         QThread.__init__(self)
@@ -138,8 +158,42 @@ class MBKeyboard(QThread):
 
 
 
+# class to display the Settings dialog to configure parameters for spectrometers
 class SettingsWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(SettingsWindow, self).__init__()
         self.ui = Ui_Settings()
         self.ui.setupUi(self)
+        self.ui.spect_range_sldr.valueChanged.connect(self.update_spect_range)
+        self.ui.int_time_sldr.valueChanged.connect(self.update_int_time)
+        self.ui.acq_burst_sldr.valueChanged.connect(self.update_acq_burst)
+        self.ui.ok_btn.clicked.connect(self.update_configs)
+        self.spect_range = 190
+        self.int_time = 1
+        self.acq_burst = 1
+
+    def update_spect_range(self):
+        self.spect_range = self.ui.spect_range_sldr.value() * 10
+        self.ui.spect_range_val.setText("{} nm".format(self.spect_range))
+
+    def update_int_time(self):
+        if self.ui.int_time_sldr.value() < 1:
+            self.int_time = 1
+        else:
+            self.int_time = self.ui.int_time_sldr.value() * 100
+        self.ui.int_time_val.setText("{} ms".format(self.int_time))
+            
+
+    def update_acq_burst(self):
+        if self.ui.acq_burst_sldr.value() < 1:
+            self.acq_burst = 1
+        else:
+            self.acq_burst = self.ui.acq_burst_sldr.value() * 10
+        self.ui.acq_burst_val.setText("{}".format(self.acq_burst))
+    
+    def update_configs(self):
+        print("New values: {} nm, {} ms, {}".format(self.spect_range, self.int_time, self.acq_burst))
+        #TODO: call function to set parameters for the spectrometers here
+        self.destroy()
+
+        
