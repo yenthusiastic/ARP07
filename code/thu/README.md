@@ -10,7 +10,17 @@ Make sure all libraries are installed for the GUI to function properly.
 - In current folder, run `sudo python3 main.py` to launch the GUI app.
 #### GUI app manual
 ##### Main Spectrometer Window
-![GUI_screencap](../../media/GUI_screencap170619_1.PNG)
+![GUI_screencap](../../media/GUI_screencap240619_1.PNG)
+###### Labels
+- **Batt** label: display battery level
+   - Battery LED indicator
+      - Red: battery critical
+      - Yellow: battery weak
+      - Green: battery good
+- **Data** label: display status of data transmission to USB drives
+   - Data LED indicator
+      - Blue: hyperspectral data transmission in progress
+      - Off: no hyperspectral data transmission
 ###### Touch buttons
 - **Capture** button
   - Capture a frame from camera and display it in GUI. Takes 10s on average to complete
@@ -19,15 +29,22 @@ Make sure all libraries are installed for the GUI to function properly.
   - Start: Run the data collection from hyperstrectral sensors
   - Stop: Stop the data collection from hyperstrectral sensors
 - **Settings** button
-  - Show a pop-up window to edit configurations
+  - Show a pop-up window to edit configurations for spectrometers
 
 ##### Settings pop-up window
-![Settings_screencap](../../media/GUI_screencap240619.PNG)
-##### LED indicators
-- Battery LED indicator
-   - Red: battery critical
-   - Yellow: battery weak
-   - Green: battery good
-- Data LED indicator
-   - Blue: hyperspectral data transmission in progress
-   - Off: no hyperspectral data transmission
+![Settings_screencap](../../media/GUI_screencap240619_2.PNG)
+###### Sliders
+- **Spectral range** slider
+   - Min: 190 nm
+   - Max: 1650 nm
+   - Step size: 100 nm
+- **Integration time** slider
+   - Min: 1 ms
+   - Max: 1000 ms
+   - Step size: 100 ms
+- **Acquisition burst** slider
+   - Min: 1 
+   - Max: 100 
+   - Step size: 10
+- **OK** button
+   - confirm the new parameter values

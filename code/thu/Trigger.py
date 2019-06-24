@@ -14,7 +14,7 @@ NOTE: items with [X] means completed, [+] newly added, [.] on-going, [ ] to-do
 class trigger_reader(QThread):
     trigger_pin = 13 # the pin number that the trigger is connected to Pi
     btn = Button(trigger_pin)  #set this pin as pulled up
-    #pyqtSignal to store time data of this thread to be emitted during running
+    #pyqtSignal to store trigger state of this thread to be emitted during running
     trigger_updated = pyqtSignal(bool, name='trigger_updated')
     def __init__(self):
         QThread.__init__(self)
@@ -27,5 +27,5 @@ class trigger_reader(QThread):
     def run(self):
         while True:
             if self.btn.is_pressed:
-                self.trigger_updated.emit(True)
-            time.sleep(0.5)
+                self.trigger_updated.emit(True)  #trigger is pressed, pass this signal to the main GUI thread
+            time.sleep(1.0)
