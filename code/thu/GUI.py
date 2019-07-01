@@ -8,7 +8,7 @@ from SettingsUI import Ui_Settings
 import os
 from background_task import *
 #enable following imports if RTC, GPS, Camera, Trigger, Neopixel are available
-#from RTC import RTC
+from RTC import RTC
 from GPS import GPS
 from Camera import Camera
 #from Trigger import trigger_reader
@@ -52,7 +52,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.camera_btn.clicked.connect(self.capture_frame)
 
         # initialize all background functions
-        #self.get_datetime()
+        self.get_datetime()
 
         # uncomment following lines if GPS, Neopixel, Trigger are available
         self.get_gps()

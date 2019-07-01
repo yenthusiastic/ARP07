@@ -21,6 +21,7 @@ plt.ion()
 import seabreeze.backends
 lib = seabreeze.backends.get_backend()
 
+TRIGGER_PIN = 16
 
 def init_spectrometers():
     print("Looking for spectrometer devices...")
@@ -220,8 +221,8 @@ class Ui_SpectrometerGUI(object):
         # Mode flag. Options: "raw" , "ref"
         self.mode_flag = "raw"
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(14, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.add_event_detect(14, GPIO.FALLING, callback=self.int_handler, bouncetime=200)
+        GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.int_handler, bouncetime=200)
 
         #### Start  #####################
         self._update()
