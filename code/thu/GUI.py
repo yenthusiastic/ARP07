@@ -2,15 +2,16 @@ import sys
 import os
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
+
 from SpectrometerGUI import Ui_SpectrometerGUI
 from SettingsUI import Ui_Settings
 import os
 from background_task import *
 #enable following imports if RTC, GPS, Camera, Trigger, Neopixel are available
-from RTC import RTC
+#from RTC import RTC
 from GPS import GPS
 from Camera import Camera
-from Trigger import trigger_reader
+#from Trigger import trigger_reader
 from status_led import status_led
 import numpy as np
 from PIL import Image
@@ -40,10 +41,7 @@ class MainWindow(QtWidgets.QMainWindow):
         super(MainWindow, self).__init__()
         self.ui = Ui_SpectrometerGUI()
         self.ui.setupUi(self)
-        # set size of camera frame viewport
-        self.ui.cam_label.resize(500,300)
-        self.ui.cam_label.show() 
-
+        
         # initialize list of all child dialogs 
         self.dialogs = list()
 
@@ -54,12 +52,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.camera_btn.clicked.connect(self.capture_frame)
 
         # initialize all background functions
-        self.get_datetime()
+        #self.get_datetime()
 
         # uncomment following lines if GPS, Neopixel, Trigger are available
         self.get_gps()
         self.show_batt_data_status()
-        self.get_trigger_state()
+        #self.get_trigger_state()
+        
     
     # stop the GUI
     def __del__(self):
@@ -104,6 +103,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # function to capture single camera frame
     def capture_frame(self):
+        # set size of camera frame viewport
+        self.ui.cam_label.resize(500,300)
+        self.ui.cam_label.show() 
         self.ui.cam_label.setText("Capturing camera frame. Please wait...")
         self.camera_thread = Camera()
         self.camera_thread.frame_updated.connect(self.display_frame)
@@ -123,7 +125,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.cam_label.show() 
         else:
             print("Unable to load", self.img_name)
-            self.ui.cam_label.setText("Error: Camera unavailable")
+            
+            #self.ui.cam_label.setText("Error: Camera unavailable")
         
         
 
