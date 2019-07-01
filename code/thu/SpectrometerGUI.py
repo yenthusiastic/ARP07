@@ -7,7 +7,6 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from spectrometer_plot import SpectrometerPlot
 from pyqtgraph.Qt import QtCore, QtGui
 import numpy as np
 import pyqtgraph as pg
@@ -22,12 +21,6 @@ plt.ion()
 import seabreeze.backends
 lib = seabreeze.backends.get_backend()
 
-
-#devices = sb.list_devices()
-#spec_2 = sb.Spectrometer(devices[0])
-#spec_1 = sb.Spectrometer(devices[1])
-#spec_2, spec_1 =  init_spectrometers()
-#set_int_time(120000)
 
 def init_spectrometers():
     print("Looking for spectrometer devices...")
@@ -47,8 +40,6 @@ def set_int_time(int_time):
     spec_1.integration_time_micros(int_time)
     spec_2.integration_time_micros(int_time)
     
-    
-
 
 def auto_int_time():
     # Existing Code too slow Re-do!
@@ -96,7 +87,7 @@ def get_wavelenghts():
     return wl_1, wl_2
 
 spec_2, spec_1 =  init_spectrometers()
-set_int_time(120000)
+set_int_time(240000)
 
 class Ui_SpectrometerGUI(object):
     def setupUi(self, SpectrometerGUI):
