@@ -139,7 +139,7 @@ class MainWindow(QtWidgets.QMainWindow):
     # function to read trigger state 
     def get_trigger_state(self):
         self.trigger_thread = trigger_reader()
-        self.trigger_thread.trigger_updated.connect(self.show_settings)
+        self.trigger_thread.trigger_updated.connect(self.capture_frame)
         self.trigger_thread.start()
 
 

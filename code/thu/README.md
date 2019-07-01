@@ -7,6 +7,10 @@
 
 #### Running the app
 Make sure all libraries are installed for the GUI to function properly.
+```bash
+sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
+sudo pip3 install adafruit-circuitpython-ads1x15
+```
 - In current folder, run `sudo python3 main.py` to launch the GUI app.
 #### GUI app manual
 ##### Main Spectrometer Window
@@ -21,6 +25,10 @@ Make sure all libraries are installed for the GUI to function properly.
    - Data LED indicator
       - Blue: hyperspectral data transmission in progress
       - Off: no hyperspectral data transmission
+- **Date time** label
+   - Show current date time (obtained from RTC)
+- **Location** label
+   - Show current location (latitude & longitude, obtain from GPS)
 ###### Touch buttons
 - **Capture** button
   - Capture a frame from camera and display it in GUI. Takes 10s on average to complete
