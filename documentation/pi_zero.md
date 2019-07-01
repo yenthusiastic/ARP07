@@ -19,9 +19,9 @@ Components | mA Component | mA Total
 ## Fresh Installation
 **Files to change**
  - /boot/config.txt  `(hdmi, serial, I2C)`
- - /boot/ssh `(add his file so ssh is activated)`
+ - /boot/ssh `(add this file so ssh is activated)`
  - /rootfs/etc/dhcpcd.conf  `(set static IP)`
- - /rootfs/etc/wpa_supplicant/wpa_supplicant.conf  `(WiFi network)`
+ - /rootfs/etc/wpa_supplicant/wpa_supplicant.conf  `(setup WiFi network)`
 
 ## Image
 ### Current Image
