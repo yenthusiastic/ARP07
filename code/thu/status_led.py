@@ -130,12 +130,19 @@ def get_soc(dischargeRate, voltage):
 i2c = busio.I2C(board.SCL, board.SDA)
 
 # Create the ADC object using the I2C bus
-ads = ADS.ADS1115(i2c)
+try:
+    ads = ADS.ADS1115(i2c)
+except:
+    print("No ADC found")
+    ads = None
+    
+
 
 # Create single-ended input on channel 0
-chan0 = AnalogIn(ads, ADS.P0)
-chan1 = AnalogIn(ads, ADS.P1)
-chan2 = AnalogIn(ads, ADS.P2)
+if ads is not None:
+    chan0 = AnalogIn(ads, ADS.P0)
+    chan1 = AnalogIn(ads, ADS.P1)
+    chan2 = AnalogIn(ads, ADS.P2)
 
 class batt_data_status(QThread):
     batt_status = 1
@@ -159,7 +166,7 @@ class batt_data_status(QThread):
             cDis = iBat / 6.6
             soc = get_soc(cDis, vBat)
             print("{:>5.3f}\t{:>5.3f}\t{:>5.3f}\t{:>5.3f}\t{:>5.3f}\t{:>5.3f}".format(vBat, iBatRaw, vHighHalf, iBat, cDis, soc))
-            self.batt_status = soc*100
+            self.batt_status = soc
 
             # print(self.batt_status)
             #TODO: ask for data status here

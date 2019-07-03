@@ -4,23 +4,28 @@
 - b170619: b130619 + GUI works with Camera (requires building openCV - Raspbian image to be created)
    - Update 240619: removed due to failure to compile OpenCV on Raspberry Pi
 - b240619: b130619 + GUI works with trigger button + single capture of camera frame when triggered + settings dialog
+- b010719: GUI works with spectrometer sensors & power electronics
 
 #### Running the app
 Make sure all libraries are installed for the GUI to function properly.
 ```bash
 sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
 sudo pip3 install adafruit-circuitpython-ads1x15
+sudo apt install python3-pyqtgraph
+# install seabreeze (TO DO)
 ```
 - In current folder, run `sudo python3 main.py` to launch the GUI app.
 #### GUI app manual
 ##### Main Spectrometer Window
+![GUI_screencap](../../media/GUI_010719.PNG)
+##### Camera capture window
 ![GUI_screencap](../../media/GUI_screencap240619_1.PNG)
 ###### Labels
-- **Batt** label: display battery level
+- **Batt** label: display battery level (in %)
    - Battery LED indicator
-      - Red: battery critical
-      - Yellow: battery weak
-      - Green: battery good
+      - Red: battery below 30%
+      - Yellow: battery between 30% and 70%
+      - Green: battery above 70%
 - **Data** label: display status of data transmission to USB drives
    - Data LED indicator
       - Blue: hyperspectral data transmission in progress
@@ -32,7 +37,8 @@ sudo pip3 install adafruit-circuitpython-ads1x15
 ###### Touch buttons
 - **Capture** button
   - Capture a frame from camera and display it in GUI. Takes 10s on average to complete
-- **Spectrum** button
+- **Calibrate** button
+   - Calibrate the spectrometers
 - **Start/Stop** toggle button
   - Start: Run the data collection from hyperstrectral sensors
   - Stop: Stop the data collection from hyperstrectral sensors

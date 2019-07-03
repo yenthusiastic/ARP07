@@ -220,9 +220,9 @@ class Ui_SpectrometerGUI(object):
 
         # Mode flag. Options: "raw" , "ref"
         self.mode_flag = "raw"
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.int_handler, bouncetime=200)
+        #GPIO.setmode(GPIO.BCM)
+        #GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        #GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.int_handler, bouncetime=200)
 
         #### Start  #####################
         self._update()
