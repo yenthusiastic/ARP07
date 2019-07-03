@@ -109,9 +109,9 @@ class MainWindow(QtWidgets.QMainWindow):
     
     # function to display GPS location on GUI label gps_label
     def show_location(self, gps_str):
-        if gps_str is not None:
+        if gps_str is not "":
             self.curent_location = gps_str
-            self.ui.gps_label.setText(gps_str)
+            self.ui.gps_label.setText("GPS location: {}". format(gps_str))
         else: 
             self.curent_location = None
             self.ui.gps_label.setText("Waiting for GPS data...")
