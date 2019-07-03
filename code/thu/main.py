@@ -62,17 +62,33 @@ class MainWindow(QtWidgets.QMainWindow):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.trigger_pressed_cb, bouncetime=200)
-    
+        self.session_datetime = None
+        self.session_data_dir = "data/"
+
+
     # stop the GUI
     def __del__(self):
         print("deleting Main Window")
         
 
     def trigger_pressed_cb(self, trigger_pin=None):
-        print("Trigger pin {} pressed".format(trigger_pin))
-        print(self.ui.ydata)
-        print(self.current_datetime)
-        print(self.curent_location)
+        if self.session_datetime is None:
+            self.session_datetime = self.current_datetime
+            os.mkdir(self.session_data_dir + self.session_datetime)
+            os.chdir(self.session_data_dir + self.session_datetime)
+            self.trigger_pressed_cb(self)
+            print("np",np.version.version)
+        else:
+            print("Trigger pin {} pressed".format(trigger_pin))
+            print(self.ui.ydata)
+            print(self.current_datetime)
+            print(self.curent_location)
+            np.savetxt(self.current_datetime + ".csv", self.ui.ydata, delimiter=",", fmt='%.0f')
+            #self.ui.ydata.tofile(self.current_datetime + ".csv", sep=",", newline='\n')
+            with open(self.current_datetime + ".csv",'a') as f:
+                f.writelines("GPS," + str(self.curent_location) + "\n")
+                f.writelines("timestamp," + self.current_datetime + "\n")
+            #self.capture_frame(self)
 
 
     # function to execute a thread which constantly asks for real time

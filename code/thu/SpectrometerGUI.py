@@ -13,15 +13,12 @@ import pyqtgraph as pg
 import seabreeze
 seabreeze.use("cseabreeze")
 import seabreeze.spectrometers as sb
-
-import RPi.GPIO as GPIO
 import time
 import matplotlib.pyplot as plt
 plt.ion()
 import seabreeze.backends
 lib = seabreeze.backends.get_backend()
 
-TRIGGER_PIN = 16
 
 def init_spectrometers():
     print("Looking for spectrometer devices...")
@@ -61,8 +58,8 @@ def measure_dc(avg_num=20):
     return dc_1, dc_2
 
 def measure_raw(dc=0):
-    raw_1 = spec_1.intensities()
-    raw_2 = spec_2.intensities()
+    raw_1 = np.around(spec_1.intensities()).astype(int)
+    raw_2 = np.around(spec_2.intensities()).astype(int)
     return raw_1 - dc, raw_2 - dc
 
 def measure_raw_avg(dc=0, avg_num=2):
@@ -220,9 +217,6 @@ class Ui_SpectrometerGUI(object):
 
         # Mode flag. Options: "raw" , "ref"
         self.mode_flag = "raw"
-        #GPIO.setmode(GPIO.BCM)
-        #GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        #GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.int_handler, bouncetime=200)
 
         #### Start  #####################
         self._update()

@@ -48,8 +48,8 @@ def measure_dc(avg_num=20):
     return dc_1, dc_2
 
 def measure_raw(dc=0):
-    raw_1 = spec_1.intensities()
-    raw_2 = spec_2.intensities()
+    raw_1 = np.around(spec_1.intensities()).astype(int)
+    raw_2 = np.around(spec_2.intensities()).astype(int)
     return raw_1 - dc, raw_2 - dc
 
 def measure_raw_avg(dc=0, avg_num=2):
@@ -136,7 +136,7 @@ class App(QtGui.QMainWindow):
 
     def display(self):
         #print("placeholder")
-	if self.mode_flag == "raw":
+        if self.mode_flag == "raw":
            print("raw mode")
         elif self.mode_flag == "ref":
             print("ref mode")
