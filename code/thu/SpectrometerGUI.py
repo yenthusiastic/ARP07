@@ -102,7 +102,7 @@ def measure_ref(ref_1, ref_2, dc=0, avg_num=0):
             ref_2 = raw_2 / ref_2   
             #ref_1 = np.true_divide(ref_1,raw_1)
             #ref_2 = np.true_divide(ref_2,raw_2)    
-            return ref_1, ref_2
+        return ref_1, ref_2
     except:
         return 0, 0
 
@@ -129,7 +129,7 @@ ref_2 = 1
 class Ui_SpectrometerGUI(object):
     def setupUi(self, SpectrometerGUI):
         SpectrometerGUI.setObjectName("SpectrometerGUI")
-        SpectrometerGUI.resize(650, 450)
+        SpectrometerGUI.resize(600, 450)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

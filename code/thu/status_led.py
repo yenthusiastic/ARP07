@@ -132,8 +132,9 @@ i2c = busio.I2C(board.SCL, board.SDA)
 # Create the ADC object using the I2C bus
 try:
     ads = ADS.ADS1115(i2c)
-except:
+except Exception as ex:
     print("No ADC found")
+    print("Error {}: {}".format(type(ex), ex.args))
     ads = None
     
 
