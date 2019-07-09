@@ -1,3 +1,6 @@
 **/workfiles
 *.pyc
 *.pyc
+*.idea
+piy
+pi_images
