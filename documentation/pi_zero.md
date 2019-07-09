@@ -24,6 +24,10 @@ Components | mA Component | mA Total
  - /rootfs/etc/wpa_supplicant/wpa_supplicant.conf  `(setup WiFi network)`
 
 ## Image
+### Make Image of SD-Card
+
+[The PiHut - Backing up and Restoring your Raspberry Pi's SD Card](https://thepihut.com/blogs/raspberry-pi-tutorials/17789160-backing-up-and-restoring-your-raspberry-pis-sd-card)
+`sudo dd if=/dev/sde of=pizero_ARP_gui_compiled_20190613_full.img status=progress conv=fsync`
 ### Current Image
 Download: [pizero_ARP_gui_compiled_20190613_shrunk.img](https://drive.google.com/drive/folders/1s-zRTGhcLGHEpJTI93D9O8YIeo6DgwfC) 3.6 GB
 
@@ -36,10 +40,7 @@ Download: [pizero_ARP_gui_compiled_20190613_shrunk.img](https://drive.google.com
 
 `sudo raspi-config --expand-rootfs`
 
-### Make Image of SD-Card
 
-[The PiHut - Backing up and Restoring your Raspberry Pi's SD Card](https://thepihut.com/blogs/raspberry-pi-tutorials/17789160-backing-up-and-restoring-your-raspberry-pis-sd-card)
-`sudo dd if=/dev/sde of=pizero_ARP_gui_compiled_20190613_full.img status=progress conv=fsync`
 
 
 ### Shrink Image
@@ -49,7 +50,7 @@ As ubuntu uses a loot of loop devices at */dev/loopXX*, I modified the script to
 To make sure, enter `ls /dev/loop90` into the terminal, the directory should not exist!
 If it exist, change all **loop90** in the script to another number, not listed in `ls /dev/loop*`.
 
-Call the script with `sudo shrink_img.sh <name.img>`.
+Call the script with `sudo bash shrink_img.sh <name.img>`.
 
 shrink_img.sh:
 ```bash
