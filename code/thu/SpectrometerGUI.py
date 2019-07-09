@@ -22,71 +22,104 @@ lib = seabreeze.backends.get_backend()
 
 def init_spectrometers():
     print("Looking for spectrometer devices...")
-    devices = sb.list_devices()
-    print(devices)
+    try:
+        devices = sb.list_devices()
+        print(devices)
+    except Exception as ex:
+        print("Cannot find any devices")
+        print("Error {}: {}".format(type(ex), ex.args))
     
-    lib.device_close(devices[0])
-    lib.device_close(devices[1])
+    try:
+        lib.device_close(devices[0])
+        lib.device_close(devices[1])
+    except Exception as ex:
+        print("Cannot close connections to the spectrometers")
+        print("Error {}: {}".format(type(ex), ex.args))
 
     try:
         return sb.Spectrometer(devices[0]), sb.Spectrometer(devices[1])
-    except:
+    except Exception as ex:
         print("Can't connect to two Spectrometers.")
+        print("Error {}: {}".format(type(ex), ex.args))
+        return None, None
 
 
 def set_int_time(int_time):
-    spec_1.integration_time_micros(int_time)
-    spec_2.integration_time_micros(int_time)
-    
+    try:
+        spec_1.integration_time_micros(int_time)
+        spec_2.integration_time_micros(int_time)
+    except:
+        print("Cannot set integration time")
 
 def auto_int_time():
     # Existing Code too slow Re-do!
     print("TBD...")
 
 def measure_avg(dc=0, avg_num=10):
-    avg_1 = np.around(spec_1.intensities()).astype(int)
-    avg_2 = np.around(spec_2.intensities()).astype(int)
-    for i in range(avg_num - 1):
-        avg_1 = np.add(avg_1, np.around(spec_1.intensities()).astype(int))
-        avg_2 = np.add(avg_2, np.around(spec_2.intensities()).astype(int))
-    avg_1 = np.around(np.true_divide(avg_1, avg_num)).astype(int)
-    avg_2 = np.around(np.true_divide(avg_2, avg_num)).astype(int)
-    return avg_1 - dc, avg_2 - dc
+    try:
+        avg_1 = np.around(spec_1.intensities()).astype(int)
+        avg_2 = np.around(spec_2.intensities()).astype(int)
+        for i in range(avg_num - 1):
+            avg_1 = np.add(avg_1, np.around(spec_1.intensities()).astype(int))
+            avg_2 = np.add(avg_2, np.around(spec_2.intensities()).astype(int))
+        avg_1 = np.around(np.true_divide(avg_1, avg_num)).astype(int)
+        avg_2 = np.around(np.true_divide(avg_2, avg_num)).astype(int)
+        return avg_1 - dc, avg_2 - dc
+    except:
+        return 0
 
 def measure_dc(avg_num=20):
-    dc_1, dc_2 = measure_avg(avg_num=avg_num)
-    return dc_1, dc_2
+    try:
+        dc_1, dc_2 = measure_avg(avg_num=avg_num)
+        return dc_1, dc_2
+    except:
+        return 0, 0
 
 def measure_raw(dc=0):
-    raw_1 = np.around(spec_1.intensities()).astype(int)
-    raw_2 = np.around(spec_2.intensities()).astype(int)
-    return raw_1 - dc, raw_2 - dc
+    try:
+        raw_1 = np.around(spec_1.intensities()).astype(int)
+        raw_2 = np.around(spec_2.intensities()).astype(int)
+        return raw_1 - dc, raw_2 - dc
+    except:
+        return 0
 
 def measure_raw_avg(dc=0, avg_num=2):
-    raw_1, raw_2 = measure_avg(avg_num=avg_num)
-    return raw_1 - dc, raw_2 - dc
+    try:
+        raw_1, raw_2 = measure_avg(avg_num=avg_num)
+        return raw_1 - dc, raw_2 - dc
+    except:
+        return 0, 0
 
 def measure_ref(ref_1, ref_2, dc=0, avg_num=0):
-    if avg_num == 0:
-        raw_1, raw_2 = measure_raw(dc=dc)
-    else:
-        raw_1, raw_2 = measure_avg(dc=dc, avg_num=avg_num)
-    #ref_1 = np.true_divide(raw_1,ref_1)
-    #ref_2 = np.true_divide(raw_2,ref_2)
-    ref_1 = raw_1 / ref_1
-    ref_2 = raw_2 / ref_2   
-    #ref_1 = np.true_divide(ref_1,raw_1)
-    #ref_2 = np.true_divide(ref_2,raw_2)    
-    return ref_1, ref_2
+    try:
+        if avg_num == 0:
+            raw_1, raw_2 = measure_raw(dc=dc)
+        else:
+            raw_1, raw_2 = measure_avg(dc=dc, avg_num=avg_num)
+            #ref_1 = np.true_divide(raw_1,ref_1)
+            #ref_2 = np.true_divide(raw_2,ref_2)
+            ref_1 = raw_1 / ref_1
+            ref_2 = raw_2 / ref_2   
+            #ref_1 = np.true_divide(ref_1,raw_1)
+            #ref_2 = np.true_divide(ref_2,raw_2)    
+            return ref_1, ref_2
+    except:
+        return 0, 0
 
 def calibrate_ref(dc=0, avg_num=10):
-    ref_1, ref_2 = measure_avg(avg_num=avg_num)
-    return ref_1 - dc, ref_2 - dc
+    try:
+        ref_1, ref_2 = measure_avg(avg_num=avg_num)
+        return ref_1 - dc, ref_2 - dc
+    except:
+        return 0, 0
 
 def get_wavelenghts():
-    wl_1 = spec_1.wavelengths()
-    wl_2 = spec_2.wavelengths()
-    return wl_1, wl_2
+    try:
+        wl_1 = spec_1.wavelengths()
+        wl_2 = spec_2.wavelengths()
+        return wl_1, wl_2
+    except:
+        return 0, 0
 
 spec_2, spec_1 =  init_spectrometers()
 set_int_time(10000)

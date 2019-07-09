@@ -71,6 +71,8 @@ class GPS(QThread):
                         gps_str = "({:.5f}, {:.5f})".format(self.gps.latitude, self.gps.longitude)
                         # emit GPS data to the GUI thread that is calling this thread
                         self.gps_updated.emit(str(gps_str))
+                else:
+                    self.gps_updated.emit("GPS not available")
             time.sleep(5.0)
 
 

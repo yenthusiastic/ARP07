@@ -233,9 +233,9 @@ class SettingsWindow(QtWidgets.QMainWindow):
     # and close the Settings dialog
     def update_configs(self):
         print("New values: {} nm, {} ms, {}".format(self.spect_range, self.int_time, self.acq_burst))
-        #TODO: function to update parameters
-        #self.ui.
         #TODO: call function to set parameters for the spectrometers here
+        #self.ui.
+        
         self.destroy()
 
         
