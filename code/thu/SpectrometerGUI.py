@@ -13,15 +13,12 @@ import pyqtgraph as pg
 import seabreeze
 seabreeze.use("cseabreeze")
 import seabreeze.spectrometers as sb
-
-import RPi.GPIO as GPIO
 import time
 import matplotlib.pyplot as plt
 plt.ion()
 import seabreeze.backends
 lib = seabreeze.backends.get_backend()
 
-TRIGGER_PIN = 16
 
 def init_spectrometers():
     print("Looking for spectrometer devices...")
@@ -61,8 +58,8 @@ def measure_dc(avg_num=20):
     return dc_1, dc_2
 
 def measure_raw(dc=0):
-    raw_1 = spec_1.intensities()
-    raw_2 = spec_2.intensities()
+    raw_1 = np.around(spec_1.intensities()).astype(int)
+    raw_2 = np.around(spec_2.intensities()).astype(int)
     return raw_1 - dc, raw_2 - dc
 
 def measure_raw_avg(dc=0, avg_num=2):
@@ -70,12 +67,16 @@ def measure_raw_avg(dc=0, avg_num=2):
     return raw_1 - dc, raw_2 - dc
 
 def measure_ref(ref_1, ref_2, dc=0, avg_num=0):
-    if avg == 0:
+    if avg_num == 0:
         raw_1, raw_2 = measure_raw(dc=dc)
     else:
-        avg_1, avg_2 = measure_avg(dc=dc, avg_num=avg_num)
-    ref_1 = np.true_divide(raw_1,ref_1)
-    ref_2 = np.true_divide(raw_2,ref_2)
+        raw_1, raw_2 = measure_avg(dc=dc, avg_num=avg_num)
+    #ref_1 = np.true_divide(raw_1,ref_1)
+    #ref_2 = np.true_divide(raw_2,ref_2)
+    ref_1 = raw_1 / ref_1
+    ref_2 = raw_2 / ref_2   
+    #ref_1 = np.true_divide(ref_1,raw_1)
+    #ref_2 = np.true_divide(ref_2,raw_2)    
     return ref_1, ref_2
 
 def calibrate_ref(dc=0, avg_num=10):
@@ -88,12 +89,14 @@ def get_wavelenghts():
     return wl_1, wl_2
 
 spec_2, spec_1 =  init_spectrometers()
-set_int_time(240000)
+set_int_time(10000)
+ref_1 = 1
+ref_2 = 1
 
 class Ui_SpectrometerGUI(object):
     def setupUi(self, SpectrometerGUI):
         SpectrometerGUI.setObjectName("SpectrometerGUI")
-        SpectrometerGUI.resize(720, 450)
+        SpectrometerGUI.resize(650, 450)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -105,15 +108,15 @@ class Ui_SpectrometerGUI(object):
         self.centralwidget = QtWidgets.QWidget(SpectrometerGUI)
         self.centralwidget.setObjectName("centralwidget")
         self.camera_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.camera_btn.setGeometry(QtCore.QRect(540, 140, 150, 60))
+        self.camera_btn.setGeometry(QtCore.QRect(470, 140, 100, 60))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.camera_btn.sizePolicy().hasHeightForWidth())
         self.camera_btn.setSizePolicy(sizePolicy)
-        self.camera_btn.setMinimumSize(QtCore.QSize(150, 40))
+        self.camera_btn.setMinimumSize(QtCore.QSize(100, 40))
         font = QtGui.QFont()
-        font.setPointSize(17)
+        font.setPointSize(15)
         self.camera_btn.setFont(font)
         self.camera_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.camera_btn.setDefault(False)
@@ -121,26 +124,26 @@ class Ui_SpectrometerGUI(object):
         self.camera_btn.setProperty("pressed", False)
         self.camera_btn.setObjectName("camera_btn")
         self.cal_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.cal_btn.setGeometry(QtCore.QRect(540, 210, 150, 60))
-        self.cal_btn.setMinimumSize(QtCore.QSize(150, 40))
+        self.cal_btn.setGeometry(QtCore.QRect(470, 210, 100, 60))
+        self.cal_btn.setMinimumSize(QtCore.QSize(100, 40))
         font = QtGui.QFont()
-        font.setPointSize(19)
+        font.setPointSize(15)
         self.cal_btn.setFont(font)
         self.cal_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.cal_btn.setObjectName("cal_btn")
         self.settings_btn = QtWidgets.QToolButton(self.centralwidget)
-        self.settings_btn.setGeometry(QtCore.QRect(540, 350, 150, 60))
-        self.settings_btn.setMinimumSize(QtCore.QSize(150, 40))
+        self.settings_btn.setGeometry(QtCore.QRect(470, 350, 100, 60))
+        self.settings_btn.setMinimumSize(QtCore.QSize(100, 40))
         font = QtGui.QFont()
-        font.setPointSize(20)
+        font.setPointSize(15)
         self.settings_btn.setFont(font)
         self.settings_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.settings_btn.setObjectName("settings_btn")
         self.start_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.start_btn.setGeometry(QtCore.QRect(540, 280, 150, 60))
-        self.start_btn.setMinimumSize(QtCore.QSize(150, 40))
+        self.start_btn.setGeometry(QtCore.QRect(470, 280, 100, 60))
+        self.start_btn.setMinimumSize(QtCore.QSize(100, 40))
         font = QtGui.QFont()
-        font.setPointSize(20)
+        font.setPointSize(15)
         self.start_btn.setFont(font)
         self.start_btn.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.start_btn.setObjectName("start_btn")
@@ -151,27 +154,27 @@ class Ui_SpectrometerGUI(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.time_label.sizePolicy().hasHeightForWidth())
         self.time_label.setSizePolicy(sizePolicy)
-        self.time_label.setMinimumSize(QtCore.QSize(220, 30))
+        self.time_label.setMinimumSize(QtCore.QSize(200, 30))
         font = QtGui.QFont()
-        font.setPointSize(18)
+        font.setPointSize(15)
         self.time_label.setFont(font)
         self.time_label.setObjectName("time_label")
         self.gps_label = QtWidgets.QLabel(self.centralwidget)
-        self.gps_label.setGeometry(QtCore.QRect(15, 90, 511, 35))
+        self.gps_label.setGeometry(QtCore.QRect(15, 80, 511, 35))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.gps_label.sizePolicy().hasHeightForWidth())
         self.gps_label.setSizePolicy(sizePolicy)
-        self.gps_label.setMinimumSize(QtCore.QSize(160, 30))
+        self.gps_label.setMinimumSize(QtCore.QSize(130, 30))
         font = QtGui.QFont()
-        font.setPointSize(18)
+        font.setPointSize(15)
         self.gps_label.setFont(font)
         self.gps_label.setLayoutDirection(QtCore.Qt.RightToLeft)
         self.gps_label.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.gps_label.setObjectName("gps_label")
         self.cam_label = QtWidgets.QLabel(self.centralwidget)
-        self.cam_label.setGeometry(QtCore.QRect(10, 120, 265, 50))
+        self.cam_label.setGeometry(QtCore.QRect(10, 110, 265, 50))
         font = QtGui.QFont()
         font.setPointSize(18)
         self.cam_label.setFont(font)
@@ -181,14 +184,14 @@ class Ui_SpectrometerGUI(object):
         pg.setConfigOption('background', 'w')
         pg.setConfigOption('foreground', 'k')
         self.graphWidget = pg.Qt.QtGui.QWidget(self.centralwidget)
-        self.graphWidget.setGeometry(QtCore.QRect(10, 150, 500, 300))
+        self.graphWidget.setGeometry(QtCore.QRect(10, 120, 450, 300))
         self.graphWidget.setLayout(QtGui.QVBoxLayout())
 
         self.canvas = pg.GraphicsLayoutWidget()
         self.graphWidget.layout().addWidget(self.canvas)
 
-        self.label = QtWidgets.QLabel()
-        self.graphWidget.layout().addWidget(self.label)
+        self.fps_label = QtWidgets.QLabel()
+        self.graphWidget.layout().addWidget(self.fps_label)
 
         #  line plot
         self.otherplot = self.canvas.addPlot()
@@ -220,18 +223,17 @@ class Ui_SpectrometerGUI(object):
 
         # Mode flag. Options: "raw" , "ref"
         self.mode_flag = "raw"
-        #GPIO.setmode(GPIO.BCM)
-        #GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        #GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.int_handler, bouncetime=200)
+        self.ref_1 = 1
+        self.ref_2 = 1
 
         #### Start  #####################
         self._update()
 
         self.batt_label = QtWidgets.QLabel(self.centralwidget)
-        self.batt_label.setGeometry(QtCore.QRect(350, 10, 70, 35))
+        self.batt_label.setGeometry(QtCore.QRect(200, 10, 70, 35))
         self.batt_label.setObjectName("batt_label")
         self.data_label = QtWidgets.QLabel(self.centralwidget)
-        self.data_label.setGeometry(QtCore.QRect(550, 10, 75, 35))
+        self.data_label.setGeometry(QtCore.QRect(400, 10, 75, 35))
         self.data_label.setObjectName("data_label")
         SpectrometerGUI.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(SpectrometerGUI)
@@ -243,9 +245,9 @@ class Ui_SpectrometerGUI(object):
         self.ref_action.setObjectName("ref_action")
         self.retranslateUi(SpectrometerGUI)
         QtCore.QMetaObject.connectSlotsByName(SpectrometerGUI)
-
         
-
+        self.cal_btn.clicked.connect(self.calibrate)
+        
 
 
     def retranslateUi(self, SpectrometerGUI):
@@ -263,6 +265,10 @@ class Ui_SpectrometerGUI(object):
         self.config_action.setText(_translate("SpectrometerGUI", "Load configurations"))
         self.ref_action.setText(_translate("SpectrometerGUI", "Preferences"))
 
+    def calibrate(self):
+        #print("calibrating...")          
+        self.ref_1, self.ref_2 = calibrate_ref(dc=0, avg_num=10)
+        self.otherplot.setRange(yRange=[0,1.1]) 
 
     def int_handler(self, channel):
         print("interrupt handler")
@@ -277,7 +283,10 @@ class Ui_SpectrometerGUI(object):
     def _update(self):
         #self.ydata = np.concatenate((np.delete(spec_1.intensities(),[0,1]),spec_2.intensities()), axis=None) # subtract dark current
         #self.display()
-        meas_1, meas_2 = measure_raw()
+        #meas_1, meas_2 = measure_raw()
+        
+        meas_1, meas_2 = measure_ref(self.ref_1,self.ref_2)     
+
         self.ydata = np.concatenate((np.delete(meas_1,[0,1]),meas_2), axis=None) # subtract dark current
         self.h2.setData(self.ydata)
 
@@ -290,7 +299,10 @@ class Ui_SpectrometerGUI(object):
             self.lastupdate = now
             self.fps = self.fps * 0.9 + fps2 * 0.1
             tx = 'Mean Frame Rate:  {fps:.3f} FPS'.format(fps=self.fps )
-            self.label.setText(tx)
+            font = QtGui.QFont()
+            font.setPointSize(15)
+            self.fps_label.setFont(font)
+            self.fps_label.setText(tx)
             QtCore.QTimer.singleShot(10, self._update)
             self.counter += 1
 

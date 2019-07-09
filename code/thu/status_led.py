@@ -156,16 +156,19 @@ class batt_data_status(QThread):
 
     def run(self):
         while True:
-            #TODO: ask for battery status here
-            # as example, generating random integers between -1, 0, 1
-            #self.batt_status = randint(-1, 1)
-            vBat = chan0.voltage * 2
-            iBatRaw = chan1.voltage * 2
-            vHighHalf = chan2.voltage
-            iBat = (iBatRaw - vHighHalf) / 0.185
-            cDis = iBat / 6.6
-            soc = get_soc(cDis, vBat)
-            print("{:>5.3f}\t{:>5.3f}\t{:>5.3f}\t{:>5.3f}\t{:>5.3f}\t{:>5.3f}".format(vBat, iBatRaw, vHighHalf, iBat, cDis, soc))
+            try:
+                # as example, generating random integers between -1, 0, 1
+                #self.batt_status = randint(-1, 1)
+                vBat = chan0.voltage * 2
+                iBatRaw = chan1.voltage * 2
+                vHighHalf = chan2.voltage
+                iBat = (iBatRaw - vHighHalf) / 0.185
+                cDis = iBat / 6.6
+                soc = get_soc(cDis, vBat)
+            except:
+                soc = 33.3
+            #print("{:>5.3f}\t{:>5.3f}\t{:>5.3f}\t{:>5.3f}\t{:>5.3f}\t{:>5.3f}".format(vBat, iBatRaw, vHighHalf, iBat, cDis, soc))
+            print("{:>5.3f}".format(soc))
             self.batt_status = soc
 
             # print(self.batt_status)

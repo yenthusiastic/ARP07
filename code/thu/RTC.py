@@ -18,8 +18,12 @@ class RTC(QThread):
     def __init__(self):
         QThread.__init__(self)
         # initialize RTC
-        self.ds3231 = SDL_DS3231(1, self.default_I2C_addr)
-        self.ds3231.write_now()
+        try:
+            self.ds3231 = SDL_DS3231(1, self.default_I2C_addr)
+            self.ds3231.write_now()
+        except:
+            print("no RTC found")
+            self.ds3231 = None
         
 
     def __del__(self):
@@ -28,10 +32,13 @@ class RTC(QThread):
 
     def run(self):
         while True:
-            # get date time from RTC
-            time_str = str(self.ds3231.read_datetime()).split(".")[0]
-            #print('RTC time: %s' % time_str)
+            if self.ds3231 is not None:
+                # get date time from RTC
+                time_str = str(self.ds3231.read_datetime()).split(".")[0]
+                #print('RTC time: %s' % time_str)
 
-            # emit time data to the GUI thread that is calling this thread
-            self.time_updated.emit(str(time_str))
+                # emit time data to the GUI thread that is calling this thread
+                self.time_updated.emit(str(time_str))
+            else:
+                self.time_updated.emit(str(""))
             time.sleep(1.0)

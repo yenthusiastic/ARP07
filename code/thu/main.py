@@ -62,38 +62,66 @@ class MainWindow(QtWidgets.QMainWindow):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.trigger_pressed_cb, bouncetime=200)
-    
+        self.session_datetime = None
+        self.session_data_dir = "data/"
+        
+
     # stop the GUI
     def __del__(self):
         print("deleting Main Window")
         
 
     def trigger_pressed_cb(self, trigger_pin=None):
-        print("Trigger pin {} pressed".format(trigger_pin))
-        print(self.ui.ydata)
-        print(self.current_datetime)
-        print(self.curent_location)
+        if self.session_datetime is None:
+            self.session_datetime = self.current_datetime
+            os.mkdir(self.session_data_dir + self.session_datetime)
+            os.chdir(self.session_data_dir + self.session_datetime)
+            self.trigger_pressed_cb(self)
+            print("np",np.version.version)
+        else:
+            print("Trigger pin {} pressed".format(trigger_pin))
+            #print(self.ui.ydata)
+            #print(self.current_datetime)
+            #print(self.curent_location)
+            np.savetxt(self.current_datetime + ".csv", self.ui.ydata, delimiter=",", fmt='%.0f')
+            with open(self.current_datetime + ".csv",'a') as f:
+                f.writelines("GPS," + str(self.curent_location) + "\n")
+                f.writelines("timestamp," + self.current_datetime + "\n")
+            #self.capture_frame(self)
 
 
     # function to execute a thread which constantly asks for real time
     def get_datetime(self):
-        #self.rtc_thread = get_PC_time()  #use PC time, comment if RTC available
-        self.rtc_thread = RTC()         #uncomment if RTC available
-        self.rtc_thread.time_updated.connect(self.show_datetime)
-        self.rtc_thread.start()
+        try:
+            self.rtc_thread = RTC() 
+            self.rtc_thread.time_updated.connect(self.show_datetime)
+            self.rtc_thread.start()
+        except Exception as ex:
+            print("Error {}: {}".format(type(ex), ex.args))
+            self.rtc_thread = get_PC_time()  #use PC time instead
+        
 
     # function to execute a thread which constantly asks for GPS location
     def get_gps(self):
-        self.gps_thread = GPS()
-        self.gps_thread.gps_updated.connect(self.show_location)
-        self.gps_thread.start()        
+        try:
+            self.gps_thread = GPS()
+            self.gps_thread.gps_updated.connect(self.show_location)
+            self.gps_thread.start()  
+        except Exception as ex:
+            print("Error {}: {}".format(type(ex), ex.args))
+            self.ui.gps_label.setText("Cannot connect to GPS module");     
 
     # function to execute a thread which constantly shows battery and data status on Neopixel LED
     def show_batt_data_status(self):
-        self.status_led_thread = status_led()
-        self.status_led_thread.led_off = False
-        self.status_led_thread.batt_data_updated.connect(self.show_batt_level)
-        self.status_led_thread.start()
+        try:
+            self.status_led_thread = status_led()
+            self.status_led_thread.led_off = False
+            self.status_led_thread.batt_data_updated.connect(self.show_batt_level)
+            self.status_led_thread.start()
+        except Exception as ex:
+            print("Error {}: {}".format(type(ex), ex.args))
+            self.ui.batt_label.setText("Batt: NA")
+            self.ui.data_label.setText("Data: NA")
 
     def show_batt_level(self, batt_data_value):
         self.ui.batt_label.setText("Batt: {}".format(batt_data_value[0]))
@@ -205,6 +233,8 @@ class SettingsWindow(QtWidgets.QMainWindow):
     # and close the Settings dialog
     def update_configs(self):
         print("New values: {} nm, {} ms, {}".format(self.spect_range, self.int_time, self.acq_burst))
+        #TODO: function to update parameters
+        #self.ui.
         #TODO: call function to set parameters for the spectrometers here
         self.destroy()
 
