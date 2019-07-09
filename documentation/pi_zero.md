@@ -29,6 +29,8 @@ Components | mA Component | mA Total
 [The PiHut - Backing up and Restoring your Raspberry Pi's SD Card](https://thepihut.com/blogs/raspberry-pi-tutorials/17789160-backing-up-and-restoring-your-raspberry-pis-sd-card)
 `sudo dd if=/dev/sde of=pizero_ARP_gui_compiled_20190613_full.img status=progress conv=fsync`
 ### Current Image
+Download: [ARP_20190709_backup_shrunk.img](https://drive.google.com/open?id=1rfREauANV5zAvB0H6_neLXHkmmK_9iFZ) 7.2 GB
+
 Download: [pizero_ARP_gui_compiled_20190613_shrunk.img](https://drive.google.com/drive/folders/1s-zRTGhcLGHEpJTI93D9O8YIeo6DgwfC) 3.6 GB
 
 ## Flash Image on SD-Card
