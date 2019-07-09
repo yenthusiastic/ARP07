@@ -1,6 +1,7 @@
 **/workfiles
 *.pyc
 *.pyc
+code/thu/data
 *.idea
 piy
 pi_images
