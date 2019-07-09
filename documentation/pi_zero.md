@@ -50,7 +50,7 @@ As ubuntu uses a loot of loop devices at */dev/loopXX*, I modified the script to
 To make sure, enter `ls /dev/loop90` into the terminal, the directory should not exist!
 If it exist, change all **loop90** in the script to another number, not listed in `ls /dev/loop*`.
 
-Call the script with `sudo shrink_img.sh <name.img>`.
+Call the script with `sudo bash shrink_img.sh <name.img>`.
 
 shrink_img.sh:
 ```bash
