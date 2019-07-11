@@ -108,22 +108,3 @@ To use this keyboard as default match-box keyboard:
 ```bash
 sudo cp $HOME/Documents/ARP07/code/thu/keyboard.yml /usr/share/matchbox-keyboard/
 ```
-- Install FFMPEG to read video frame from USB camera (openCV failed to compile with python3 on Pi Zero)
-```bash
-sudo apt-get install ffmpeg
-```
-List available Camera devices
-```bash
-v4l2-ctl --list-devices
-```
-Usw ffmpeg to read camera captures and save to output file
-```bash
-ffmpeg -f v4l2 -framerate 25 -video_size 640x480 -i /dev/video0 output.mkv
-```
-
-`cat /var/log/auth.log`
-
-```bash
-sudo iptables-tnat-A PREROUTING-ieth0-ptcp--dport1:1024-j REDIRECT--to-port 9999
-echo -e '\0' | nc -l -k -p 9999
-```

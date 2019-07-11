@@ -31,8 +31,6 @@ Components | mA Component | mA Total
 ### Current Image
 Download: [ARP_20190709_backup_shrunk.img](https://drive.google.com/open?id=1rfREauANV5zAvB0H6_neLXHkmmK_9iFZ) 7.2 GB
 
-Download: [pizero_ARP_gui_compiled_20190613_shrunk.img](https://drive.google.com/drive/folders/1s-zRTGhcLGHEpJTI93D9O8YIeo6DgwfC) 3.6 GB
-
 ## Flash Image on SD-Card
 [raspberrypi.org - Installing operating system images](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
 
