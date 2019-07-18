@@ -8,13 +8,13 @@ from SettingsUI import Ui_Settings
 import os
 from background_task import *
 #enable following imports if RTC, GPS, Camera, Trigger, Neopixel are available
-#from RTC import RTC
-#from GPS import GPS
+from RTC import RTC
+from GPS import GPS
 from Camera import Camera
-#from status_led import status_led
+from status_led import status_led
 import numpy as np
 from PIL import Image
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 
 
 
@@ -37,7 +37,6 @@ NOTE: items with [X] means completed, [+] newly added, [-] removed, [.] on-going
 TRIGGER_PIN = 16
 class MainWindow(QtWidgets.QMainWindow):
     camera_on = True  #boolean to store toggle state of camera capture
-   
     def __init__(self):
         super(MainWindow, self).__init__()
         self.ui = Ui_SpectrometerGUI()
@@ -59,9 +58,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.get_gps()
         self.show_batt_data_status()
         
-        #GPIO.setmode(GPIO.BCM)
-        #GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        #GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.trigger_pressed_cb, bouncetime=200)
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.trigger_pressed_cb, bouncetime=200)
         self.session_datetime = None
         self.session_data_dir = "data/"
         
@@ -87,7 +86,15 @@ class MainWindow(QtWidgets.QMainWindow):
             with open(self.current_datetime + ".csv",'a') as f:
                 f.writelines("GPS," + str(self.curent_location) + "\n")
                 f.writelines("timestamp," + self.current_datetime + "\n")
-            #self.capture_frame(self)
+            # start grabbing camera frames
+            if (not self.camera_on):
+                self.camera_on = True
+                self.toggle_camera()
+            # most recent camera frame is stored in variable camera_frame 
+            # save this numpy array to file
+            # np.save(self.camera_frame)
+            self.camera_on = False # turn off camera at the end of the capturing process
+
 
 
     # function to execute a thread which constantly asks for real time
@@ -122,12 +129,13 @@ class MainWindow(QtWidgets.QMainWindow):
             print("Error {}: {}".format(type(ex), ex.args))
             self.ui.batt_label.setText("Batt: NA")
             self.ui.data_label.setText("Data: NA")
+        self.ui.batt_label.adjustSize()
+        self.ui.data_label.adjustSize()
 
     def show_batt_level(self, batt_data_value):
         self.ui.batt_label.setText("Batt: {}".format(batt_data_value[0]))
         self.ui.data_label.setText("Data: {}".format(batt_data_value[1]))
-        self.ui.batt_label.adjustSize()
-        self.ui.data_label.adjustSize()
+        
     
     # function to display date time on GUI label time_label
     def show_datetime(self, time_str):
@@ -173,6 +181,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.cam_label.setPixmap(QtGui.QPixmap(img))
         self.ui.cam_label.raise_()
         self.ui.cam_label.show() 
+        self.camera_frame = frame
         
         
 

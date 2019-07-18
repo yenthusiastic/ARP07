@@ -3,8 +3,8 @@ Most current image available on [Google Drive](https://drive.google.com/drive/u/
 
 ### Image version log
 - Build 13.06.19: Raspian + PyQt5 + dependencies for RTC, GPS, Neopixel. 
-- Build 09.07.19: b13.06.19 + pyqtgraph + dependencies for ADC, Spectrometer
-- Build 11.07.19: b09.07.19 + openCV compiled, tested working with python3
+- Build 09.07.19: b13.06.19 + pyqtgraph + dependencies for ADC, Seabreeze for Spectrometer
+- Build 12.07.19: b09.07.19 + openCV compiled, tested working with python3
 
 
 ### Flash OS Image on SD-Card

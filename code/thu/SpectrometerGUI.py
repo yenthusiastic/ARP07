@@ -288,8 +288,8 @@ class Ui_SpectrometerGUI(object):
         self.time_label.setText(_translate("SpectrometerGUI", "Current date time:"))
         self.gps_label.setText(_translate("SpectrometerGUI", "GPS location: 51.4910482, 6.5350449"))
         #self.cam_label.setText(_translate("SpectrometerGUI", "Camera disabled."))
-        self.batt_label.setText(_translate("SpectrometerGUI", "Batt:"))
-        self.data_label.setText(_translate("SpectrometerGUI", "Data:"))
+        self.batt_label.setText(_translate("SpectrometerGUI", "Batt: 33.3%"))
+        self.data_label.setText(_translate("SpectrometerGUI", "Data: ON"))
         self.config_action.setText(_translate("SpectrometerGUI", "Load configurations"))
         self.ref_action.setText(_translate("SpectrometerGUI", "Preferences"))
 

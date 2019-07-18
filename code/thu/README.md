@@ -7,19 +7,19 @@
 - b010719: GUI works with spectrometer sensors & power electronics
 
 #### Running the app
-Make sure all libraries are installed for the GUI to function properly.
+- Flash SD card with latest system image containing all required dependecies as instructed [here](../../documentation/image_instructions.md).
+- Pull latest update from the project's git repo:
 ```bash
-sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
-sudo pip3 install adafruit-circuitpython-ads1x15
-sudo apt install python3-pyqtgraph
-# install seabreeze (TO DO)
+cd Documents/ARP07/
+git pull
+cd code/final/
 ```
 - In current folder, run `sudo python3 main.py` to launch the GUI app.
 #### GUI app manual
 ##### Main Spectrometer Window
-![GUI_screencap](../../media/GUI_010719.PNG)
+![GUI_screencap](../../media/GUI_180719_1.PNG)
 ##### Camera capture window
-![GUI_screencap](../../media/GUI_screencap240619_1.PNG)
+![GUI_screencap](../../media/GUI_180719_2.PNG)
 ###### Labels
 - **Batt** label: display battery level (in %)
    - Battery LED indicator
@@ -35,13 +35,11 @@ sudo apt install python3-pyqtgraph
 - **Location** label
    - Show current location (latitude & longitude, obtain from GPS)
 ###### Touch buttons
-- **Capture** button
-  - Capture a frame from camera and display it in GUI. Takes 10s on average to complete
+- **Capture** toggle
+  - Press one to capture a frame from camera and display it in GUI. 
+  - Press again to return to spectrum view
 - **Calibrate** button
    - Calibrate the spectrometers
-- **Start/Stop** toggle button
-  - Start: Run the data collection from hyperstrectral sensors
-  - Stop: Stop the data collection from hyperstrectral sensors
 - **Settings** button
   - Show a pop-up window to edit configurations for spectrometers
 
