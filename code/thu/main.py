@@ -8,13 +8,13 @@ from SettingsUI import Ui_Settings
 import os
 from background_task import *
 #enable following imports if RTC, GPS, Camera, Trigger, Neopixel are available
-from RTC import RTC
-from GPS import GPS
+#from RTC import RTC
+#from GPS import GPS
 from Camera import Camera
-from status_led import status_led
+#from status_led import status_led
 import numpy as np
 from PIL import Image
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 
 
 
@@ -36,7 +36,7 @@ NOTE: items with [X] means completed, [+] newly added, [-] removed, [.] on-going
 """
 TRIGGER_PIN = 16
 class MainWindow(QtWidgets.QMainWindow):
-    img_name = 'cap.png'
+    camera_on = True  #boolean to store toggle state of camera capture
    
     def __init__(self):
         super(MainWindow, self).__init__()
@@ -50,7 +50,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.settings_btn.clicked.connect(self.show_settings)
         # attach action capture_frame() to Camera button when clicked
         # uncomment following if camera is available 
-        self.ui.camera_btn.clicked.connect(self.capture_frame)
+        self.ui.camera_btn.clicked.connect(self.toggle_camera)
 
         # initialize all background functions
         self.get_datetime()
@@ -59,9 +59,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.get_gps()
         self.show_batt_data_status()
         
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.trigger_pressed_cb, bouncetime=200)
+        #GPIO.setmode(GPIO.BCM)
+        #GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        #GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.trigger_pressed_cb, bouncetime=200)
         self.session_datetime = None
         self.session_data_dir = "data/"
         
@@ -146,31 +146,33 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.gps_label.adjustSize()
 
     # function to capture single camera frame
-    def capture_frame(self):
-        # set size of camera frame viewport
-        self.ui.cam_label.resize(500,300)
-        self.ui.cam_label.show() 
-        self.ui.cam_label.setText("Capturing camera frame. Please wait...")
-        self.camera_thread = Camera()
-        self.camera_thread.frame_updated.connect(self.display_frame)
-        self.camera_thread.start()
+    def toggle_camera(self):
+        if self.camera_on:
+            # set size of camera frame viewport
+            self.ui.cam_label.resize(430,250)
+            self.camera_thread = Camera()
+            self.camera_thread.camera_on = True
+            self.camera_thread.frame_updated.connect(self.display_frame)
+            self.camera_thread.start()
+        else: 
+            self.ui.cam_label.resize(0,0)
+            img = QtGui.QImage((0), 0, 0, 0, QtGui.QImage.Format_RGB888)
+            self.ui.cam_label.setPixmap(QtGui.QPixmap(img))
+            self.camera_thread.camera_on = False
+            self.ui.cam_label.lower()
+            self.ui.cam_label.show()
+            self.ui.graphWidget.raise_()
+        self.camera_on = not self.camera_on
           
 
     # function to display camera frame on GUI viewport element
-    def display_frame(self, exit_code):
-        if exit_code == 0:
-            img = Image.open(self.img_name)
-            img.load()
-            frame = np.asarray(img)
-            height, width, channel = frame.shape
-            bytesPerLine = 3 * width
-            img = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
-            self.ui.cam_label.setPixmap(QtGui.QPixmap(img))
-            self.ui.cam_label.show() 
-        else:
-            print("Unable to load", self.img_name)
-            
-            #self.ui.cam_label.setText("Error: Camera unavailable")
+    def display_frame(self, frame):
+        height, width, channel = frame.shape
+        bytesPerLine = 3 * width
+        img = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
+        self.ui.cam_label.setPixmap(QtGui.QPixmap(img))
+        self.ui.cam_label.raise_()
+        self.ui.cam_label.show() 
         
         
 

@@ -4,7 +4,6 @@ import time
 import serial #sudo apt-get install python3-serial
 import libs.adafruit_gps as adafruit_gps
 import difflib
-import pigpio #pip3 install pigpio
 
 
 
