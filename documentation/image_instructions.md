@@ -29,11 +29,12 @@ The root partition should now take the whole SD card volume
 ![fs screenshot](../media/fs_screencap.png)
 
 ### Test GUI application
-Get the zipped Source Code version 130619 from https://github.com/yenthusiastic/ARP07/tags
+Get the zipped Source Code version 180719 from https://github.com/yenthusiastic/ARP07/tags
 Extract the zip file and run the GUI
 ```bash
-cd ARP07-b130619
+cd ARP07-b180719
 sudo python3 main.py        #sudo is required to control GPIO pins
 ```
-GUI of version 130619 looks like follows
-![GUI screenshot](../media/GUI_screencap.png)
+GUI of version 180719 looks like follows
+![GUI screenshot](../media/GUI_180719_1.PNG)
+
