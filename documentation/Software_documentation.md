@@ -1,5 +1,5 @@
 ### 1. Development platform installations
-Development platform: Windows 10
+Development platform for GUI: Windows 10
 #### 1.1. Installing Python 3.5
 ##### Option 1: Direct installation
 Download and install [Python 3.5 for Windowss](https://www.python.org/downloads/windows/) (tested working with v3.5.3)
@@ -60,8 +60,8 @@ If threading is not used, trying to fetch data from other classes will cause fol
 Check [this tutorial](https://nikolak.com/pyqt-threading-tutorial/) for more info.
 
 
-### 2. Raspberry Pi Zero installations
-Running platform: Raspberry Pi Zero
+### 2. Raspberry Pi 3 (B) installations
+Running platform: Raspberry Pi 3 Model B
 #### 2.1. Prerequisites
 Built-in Python and pip:
 - Python version: 3.5
@@ -127,21 +127,22 @@ pip install .
 
 
 #### 2.4. Install OpenCV
-**NOTE:** To avoid long installing time, the complete OS image with PyQt5, Seabreeze and OpenCV is made on 12.07.19. See instructions [here](image_instructions.md).
+**NOTE:** To avoid long installing time, the complete OS image with PyQt5, Seabreeze and OpenCV was made on 12.07.19. See instructions [here](image_instructions.md).
 
 ##### For manual installations:
-Use the [install_opencv.sh](../code/thu/install_opencv4.sh) installation script to install OpenCV.
-**IMPORTANT - Perform following steps before executing the script**
+Use the [install_opencv4.sh](../code/thu/install_opencv4.sh) installation script to install OpenCV.
+
+**IMPORTANT - Perform following steps before executing the script:**
 - Increase the SWAP on the Pi by changing CONF_SWAPSIZE in the file `/etc/dphys-swapfile`. If you do not perform this step it’s very likely that your Pi will hang.
 ```
 sudo nano /etc/dphys-swapfile
 ```
-- In this file, change `CONF_SWAPSIZE=2048`. Then restart the sawp service:        
+- In this file, change `CONF_SWAPSIZE=2048`. Then restart the SWAP service:        
 ```
 sudo /etc/init.d/dphys-swapfile stop
 sudo /etc/init.d/dphys-swapfile start
 ```
-- Execute the instalaltion script
+- Execute the installation script
 ```bash
 bash install_opencv.sh
 ```
