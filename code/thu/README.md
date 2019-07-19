@@ -1,20 +1,18 @@
 ### GUI app usage manual
-#### Tag history
+#### Software tag history
 - b130619: GUI works with RTC, Neopixel, matchbox keyboard (requires Raspbian image 130619)
 - b170619: b130619 + GUI works with Camera (requires building openCV - Raspbian image to be created)
-   - Update 240619: removed due to failure to compile OpenCV on Raspberry Pi
-- b240619: b130619 + GUI works with trigger button + single capture of camera frame when triggered + settings dialog
-- b010719: GUI works with spectrometer sensors & power electronics
+   - Update 240619: removed due to failure to compile OpenCV on Raspberry Pi Zero
+- b180719: GUI works with spectrometer sensors, power electronics & camera (requires Raspbian image 120719)
 
 #### Running the app
 - Flash SD card with latest system image containing all required dependecies as instructed [here](../../documentation/image_instructions.md).
-- Pull latest update from the project's git repo:
+- Get the latest zipped Source Code version 180719 from https://github.com/yenthusiastic/ARP07/tags
+- Extract the zip file and run the GUI
 ```bash
-cd Documents/ARP07/
-git pull
-cd code/final/
+cd ARP07-b180719
+sudo python3 main.py        #sudo is required to control GPIO pins
 ```
-- In current folder, run `sudo python3 main.py` to launch the GUI app.
 #### GUI app manual
 ##### Main Spectrometer Window
 ![GUI_screencap](../../media/GUI_180719_1.PNG)
