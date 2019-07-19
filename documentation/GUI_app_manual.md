@@ -15,9 +15,9 @@ sudo python3 main.py        #sudo is required to control GPIO pins
 ```
 #### GUI app manual
 ##### Main Spectrometer Window
-![GUI_screencap](../../media/GUI_180719_1.PNG)
+![GUI_screencap](../media/GUI_180719_1.PNG)
 ##### Camera capture window
-![GUI_screencap](../../media/GUI_180719_2.PNG)
+![GUI_screencap](../media/GUI_180719_2.PNG)
 ###### Labels
 - **Batt** label: display battery level (in %)
    - Battery LED indicator
@@ -42,7 +42,7 @@ sudo python3 main.py        #sudo is required to control GPIO pins
   - Show a pop-up window to edit configurations for spectrometers
 
 ##### Settings pop-up window
-![Settings_screencap](../../media/GUI_screencap240619_2.PNG)
+![Settings_screencap](../media/GUI_screencap240619_2.PNG)
 ###### Sliders
 - **Spectral range** slider
    - Min: 190 nm
