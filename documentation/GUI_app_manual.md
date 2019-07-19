@@ -6,7 +6,7 @@
 - b180719: GUI works with spectrometer sensors, power electronics & camera (requires Raspbian image 120719)
 
 #### Running the app
-- Flash SD card with latest system image containing all required dependecies as instructed [here](../../documentation/image_instructions.md).
+- Flash SD card with latest system image containing all required dependecies as instructed [here](../documentation/image_instructions.md).
 - Get the latest zipped Source Code version 180719 from https://github.com/yenthusiastic/ARP07/tags
 - Extract the zip file and run the GUI
 ```bash

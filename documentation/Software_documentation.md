@@ -130,7 +130,7 @@ pip install .
 **NOTE:** To avoid long installing time, the complete OS image with PyQt5, Seabreeze and OpenCV was made on 12.07.19. See instructions [here](image_instructions.md).
 
 ##### For manual installations:
-Use the [install_opencv4.sh](../code/thu/install_opencv4.sh) installation script to install OpenCV.
+Use the [install_opencv4.sh](../misc/install_opencv4.sh) installation script to install OpenCV.
 
 **IMPORTANT - Perform following steps before executing the script:**
 - Increase the SWAP on the Pi by changing CONF_SWAPSIZE in the file `/etc/dphys-swapfile`. If you do not perform this step it’s very likely that your Pi will hang.
