@@ -25,7 +25,7 @@ The field spectrometer prototype consists of 2 offthe-shelf spectrometers from O
 ### Results and Discussion 
 The spectrum is shown live within the GUI. The project is fully documented and published on this Github repository.
 
-![fig3](media/GUI_010719.PNG)
+![fig3](media/GUI_010719.png)
 
 *Fig. 3: GUI with real time graph depicting a reflectance panel measurement*
 
