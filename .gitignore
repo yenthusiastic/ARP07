@@ -1,4 +1,5 @@
 **/workfiles
+**/backups
 *.pyc
 *.pyc
 code/thu/data
