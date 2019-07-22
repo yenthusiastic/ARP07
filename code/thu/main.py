@@ -13,6 +13,7 @@ from GPS import GPS
 from Camera import Camera
 from status_led import status_led
 import numpy as np
+import csv
 from PIL import Image
 import RPi.GPIO as GPIO
 
@@ -34,10 +35,20 @@ Functions to be included, as defined in Software Architecture:
 [+] +show_numpad(): void # show virtual keyboard (numpad) to enter configurations from touchscreen
 NOTE: items with [X] means completed, [+] newly added, [-] removed, [.] on-going, [ ] to-do 
 """
+
+
 TRIGGER_PIN = 16
+
+
 class MainWindow(QtWidgets.QMainWindow):
     camera_on = True  #boolean to store toggle state of camera capture
     def __init__(self):
+        # initialize all background functions
+        self.get_datetime()
+
+        self.session_datetime = self.current_datetime
+        self.session_data_dir = "data/" + str()
+
         super(MainWindow, self).__init__()
         self.ui = Ui_SpectrometerGUI()
         self.ui.setupUi(self)
@@ -51,8 +62,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # uncomment following if camera is available 
         self.ui.camera_btn.clicked.connect(self.toggle_camera)
 
-        # initialize all background functions
-        self.get_datetime()
+
 
         # uncomment following lines if GPS, Neopixel, Trigger are available
         self.get_gps()
@@ -61,40 +71,40 @@ class MainWindow(QtWidgets.QMainWindow):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.trigger_pressed_cb, bouncetime=200)
-        self.session_datetime = None
-        self.session_data_dir = "data/"
-        
 
     # stop the GUI
     def __del__(self):
         print("deleting Main Window")
-        
 
     def trigger_pressed_cb(self, trigger_pin=None):
-        if self.session_datetime is None:
-            self.session_datetime = self.current_datetime
+        if self.session_datetime is None:   # create session folder and chdir into it
+            #self.session_datetime = self.current_datetime
             os.mkdir(self.session_data_dir + self.session_datetime)
             os.chdir(self.session_data_dir + self.session_datetime)
+            with open(self.session_datetime + ".csv", mode='w') as data_csv:
+                data_writer = csv.writer(data_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                data_writer.writerow(['timestamp', 'gps', 'data'])
             self.trigger_pressed_cb(self)
-            print("np",np.version.version)
         else:
             print("Trigger pin {} pressed".format(trigger_pin))
             #print(self.ui.ydata)
             #print(self.current_datetime)
             #print(self.curent_location)
+
+            """
             np.savetxt(self.current_datetime + ".csv", self.ui.ydata, delimiter=",", fmt='%.0f')
-            with open(self.current_datetime + ".csv",'a') as f:
+            with open(self.current_datetime + ".csv", 'a') as f:
                 f.writelines("GPS," + str(self.curent_location) + "\n")
                 f.writelines("timestamp," + self.current_datetime + "\n")
+            """
             # start grabbing camera frames
             if (not self.camera_on):
                 self.camera_on = True
                 self.toggle_camera()
-            # most recent camera frame is stored in variable camera_frame 
+            # most recent camera frame is stored in variable camera_frame
             # save this numpy array to file
             # np.save(self.camera_frame)
             self.camera_on = False # turn off camera at the end of the capturing process
-
 
 
     # function to execute a thread which constantly asks for real time
@@ -106,7 +116,6 @@ class MainWindow(QtWidgets.QMainWindow):
         except Exception as ex:
             print("Error {}: {}".format(type(ex), ex.args))
             self.rtc_thread = get_PC_time()  #use PC time instead
-        
 
     # function to execute a thread which constantly asks for GPS location
     def get_gps(self):
@@ -116,9 +125,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.gps_thread.start()  
         except Exception as ex:
             print("Error {}: {}".format(type(ex), ex.args))
-            self.ui.gps_label.setText("Cannot connect to GPS module");     
+            self.ui.gps_label.setText("Cannot connect to GPS module")
 
     # function to execute a thread which constantly shows battery and data status on Neopixel LED
+
     def show_batt_data_status(self):
         try:
             self.status_led_thread = status_led()
@@ -135,7 +145,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def show_batt_level(self, batt_data_value):
         self.ui.batt_label.setText("Batt: {}".format(batt_data_value[0]))
         self.ui.data_label.setText("Data: {}".format(batt_data_value[1]))
-        
+
     
     # function to display date time on GUI label time_label
     def show_datetime(self, time_str):
@@ -162,7 +172,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.camera_thread.camera_on = True
             self.camera_thread.frame_updated.connect(self.display_frame)
             self.camera_thread.start()
-        else: 
+        else:
             self.ui.cam_label.resize(0,0)
             img = QtGui.QImage((0), 0, 0, 0, QtGui.QImage.Format_RGB888)
             self.ui.cam_label.setPixmap(QtGui.QPixmap(img))
@@ -180,7 +190,7 @@ class MainWindow(QtWidgets.QMainWindow):
         img = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
         self.ui.cam_label.setPixmap(QtGui.QPixmap(img))
         self.ui.cam_label.raise_()
-        self.ui.cam_label.show() 
+        self.ui.cam_label.show()
         self.camera_frame = frame
         
         
@@ -192,8 +202,6 @@ class MainWindow(QtWidgets.QMainWindow):
         widget = SettingsWindow()
         self.dialogs.append(widget)
         widget.show()
-        
-
 
     # function to switch off Neopixel LED and close all threads upon exit
     def close_all_threads(self):
@@ -229,7 +237,6 @@ class SettingsWindow(QtWidgets.QMainWindow):
         else:
             self.int_time = self.ui.int_time_sldr.value() * 100
         self.ui.int_time_val.setText("{} ms".format(self.int_time))
-            
 
     # function to show value of Acqusition burst slider on screen
     def update_acq_burst(self):

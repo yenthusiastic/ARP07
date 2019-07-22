@@ -51,9 +51,11 @@ def set_int_time(int_time):
     except:
         print("Cannot set integration time")
 
+
 def auto_int_time():
     # Existing Code too slow Re-do!
     print("TBD...")
+
 
 def measure_avg(dc=0, avg_num=10):
     try:
@@ -75,6 +77,7 @@ def measure_dc(avg_num=20):
     except:
         return 0, 0
 
+
 def measure_raw(dc=0):
     try:
         raw_1 = np.around(spec_1.intensities()).astype(int)
@@ -83,12 +86,14 @@ def measure_raw(dc=0):
     except:
         return 0
 
+
 def measure_raw_avg(dc=0, avg_num=2):
     try:
         raw_1, raw_2 = measure_avg(avg_num=avg_num)
         return raw_1 - dc, raw_2 - dc
     except:
         return 0, 0
+
 
 def measure_ref(ref_1, ref_2, dc=0, avg_num=0):
     try:
@@ -106,12 +111,14 @@ def measure_ref(ref_1, ref_2, dc=0, avg_num=0):
     except:
         return 0, 0
 
+
 def calibrate_ref(dc=0, avg_num=10):
     try:
         ref_1, ref_2 = measure_avg(avg_num=avg_num)
         return ref_1 - dc, ref_2 - dc
     except:
         return 0, 0
+
 
 def get_wavelenghts():
     try:
@@ -121,13 +128,17 @@ def get_wavelenghts():
     except:
         return 0, 0
 
+
 spec_2, spec_1 =  init_spectrometers()
 set_int_time(10000)
 ref_1 = 1
 ref_2 = 1
 
+
 class Ui_SpectrometerGUI(object):
     def setupUi(self, SpectrometerGUI):
+        self.ui_session_data_dir = None
+        self.ui_session_datetime = None
         SpectrometerGUI.setObjectName("SpectrometerGUI")
         SpectrometerGUI.resize(600, 450)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -276,8 +287,6 @@ class Ui_SpectrometerGUI(object):
         QtCore.QMetaObject.connectSlotsByName(SpectrometerGUI)
         
         self.cal_btn.clicked.connect(self.calibrate)
-        
-
 
     def retranslateUi(self, SpectrometerGUI):
         _translate = QtCore.QCoreApplication.translate
@@ -333,7 +342,6 @@ class Ui_SpectrometerGUI(object):
             self.fps_label.setText(tx)
             QtCore.QTimer.singleShot(10, self._update)
             self.counter += 1
-
 
 
 if __name__ == "__main__":
