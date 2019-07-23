@@ -8,6 +8,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqtgraph.Qt import QtCore, QtGui
+import os
+import csv
 import numpy as np
 import pyqtgraph as pg
 import seabreeze
@@ -305,7 +307,15 @@ class Ui_SpectrometerGUI(object):
     def calibrate(self):
         #print("calibrating...")          
         self.ref_1, self.ref_2 = calibrate_ref(dc=0, avg_num=10)
-        self.otherplot.setRange(yRange=[0,1.1]) 
+        self.otherplot.setRange(yRange=[0, 1.1])
+        try:
+            if os.getcwd().split('/')[-1] != str(self.ui_session_datetime):
+                os.chdir(self.ui_session_data_dir)
+            with open("calibration.csv", mode='a') as data_csv:
+                data_writer = csv.writer(data_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                data_writer.writerow([self.ui_session_datetime, self.ref_1, self.ref_2])
+        except Exception as e:
+            print("SpectrometerGUI - Ui_SpectrometerGUI - calibrate - Exception:", e)
 
     def int_handler(self, channel):
         print("interrupt handler")

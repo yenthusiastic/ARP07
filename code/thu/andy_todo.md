@@ -1,7 +1,7 @@
 ## main.py
 ### def trigger_pressed_cb
 set **self.session_datetime** at start-up, after first reading from RTC
-greate session folder after that (independet from trigger press)
+create session folder after that (independent from trigger press)
 
 if trigger pressed:
   - append trigger_data to data.csv

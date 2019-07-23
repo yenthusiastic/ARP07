@@ -46,12 +46,16 @@ class MainWindow(QtWidgets.QMainWindow):
         # initialize all background functions
         self.get_datetime()
 
+        self.data_dir = "/data"
         self.session_datetime = self.current_datetime
-        self.session_data_dir = "data/" + str()
+        self.session_data_dir = self.data_dir + str(self.session_datetime)
+        self.setup_session_dir()
 
         super(MainWindow, self).__init__()
         self.ui = Ui_SpectrometerGUI()
         self.ui.setupUi(self)
+        self.ui.ui_session_data_dir = self.session_data_dir
+        self.ui.ui_session_datetime = self.session_datetime
         
         # initialize list of all child dialogs 
         self.dialogs = list()
@@ -76,27 +80,36 @@ class MainWindow(QtWidgets.QMainWindow):
     def __del__(self):
         print("deleting Main Window")
 
-    def trigger_pressed_cb(self, trigger_pin=None):
-        if self.session_datetime is None:   # create session folder and chdir into it
-            #self.session_datetime = self.current_datetime
-            os.mkdir(self.session_data_dir + self.session_datetime)
-            os.chdir(self.session_data_dir + self.session_datetime)
-            with open(self.session_datetime + ".csv", mode='w') as data_csv:
+    def setup_session_dir(self):
+        try:
+            os.mkdir(self.session_data_dir)
+            if os.getcwd().split('/')[-1] != str(self.session_datetime):
+                os.chdir(self.session_data_dir)
+            with open("measurements.csv", mode='a') as data_csv:
                 data_writer = csv.writer(data_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 data_writer.writerow(['timestamp', 'gps', 'data'])
-            self.trigger_pressed_cb(self)
-        else:
-            print("Trigger pin {} pressed".format(trigger_pin))
-            #print(self.ui.ydata)
-            #print(self.current_datetime)
-            #print(self.curent_location)
+            with open("calibration.csv", mode='a') as data_csv:
+                data_writer = csv.writer(data_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                data_writer.writerow(['timestamp', 'ref_1', 'ref_2'])
+        except Exception as e:
+            print("main - make_session_dir - Exception:", e)
 
+    def trigger_pressed_cb(self, trigger_pin=None):
+        try:
+            print("Trigger pin {} pressed".format(trigger_pin))
             """
+            print(self.ui.ydata)
+            print(self.current_datetime)
+            print(self.current_location)
             np.savetxt(self.current_datetime + ".csv", self.ui.ydata, delimiter=",", fmt='%.0f')
             with open(self.current_datetime + ".csv", 'a') as f:
                 f.writelines("GPS," + str(self.curent_location) + "\n")
                 f.writelines("timestamp," + self.current_datetime + "\n")
             """
+            # save timestamp, gps and spectral data in csv
+            with open("measurements.csv", mode='a') as data_csv:
+                data_writer = csv.writer(data_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                data_writer.writerow([str(self.current_datetime), self.curent_location, self.ui.ydata])
             # start grabbing camera frames
             if (not self.camera_on):
                 self.camera_on = True
@@ -105,7 +118,8 @@ class MainWindow(QtWidgets.QMainWindow):
             # save this numpy array to file
             # np.save(self.camera_frame)
             self.camera_on = False # turn off camera at the end of the capturing process
-
+        except Exception as e:
+            print("main - trigger_pressed_cb - Exception:", e)
 
     # function to execute a thread which constantly asks for real time
     def get_datetime(self):
