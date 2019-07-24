@@ -17,7 +17,6 @@ import numpy as np
 import csv
 from PIL import Image
 import RPi.GPIO as GPIO
-import cv2
 
 
 
@@ -60,7 +59,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.settings_btn.clicked.connect(self.show_settings)
         # attach action capture_frame() to Camera button when clicked
         # uncomment following if camera is available 
-        self.ui.camera_btn.clicked.connect(self.toggle_camera)
+        #self.ui.camera_btn.clicked.connect(self.toggle_camera)
 
 
 

@@ -97,21 +97,22 @@ def measure_raw_avg(dc=0, avg_num=2):
         return 0, 0
 
 
-def measure_ref(ref_1, ref_2, dc=0, avg_num=0):
-    try:
+def measure_ref(ref_1, ref_2, dc=0, avg_num=1):
+#    try:
         if avg_num == 0:
             raw_1, raw_2 = measure_raw(dc=dc)
+            ref_1o, ref_2o = 0,0
         else:
             raw_1, raw_2 = measure_avg(dc=dc, avg_num=avg_num)
             #ref_1 = np.true_divide(raw_1,ref_1)
             #ref_2 = np.true_divide(raw_2,ref_2)
-            ref_1 = raw_1 / ref_1
-            ref_2 = raw_2 / ref_2   
+            ref_1o = raw_1 / ref_1
+            ref_2o = raw_2 / ref_2   
             #ref_1 = np.true_divide(ref_1,raw_1)
             #ref_2 = np.true_divide(ref_2,raw_2)    
-        return ref_1, ref_2
-    except:
-        return 0, 0
+        return ref_1o, ref_2o
+#    except:
+#        return 0, 0
 
 
 def calibrate_ref(dc=0, avg_num=10):
@@ -332,7 +333,7 @@ class Ui_SpectrometerGUI(object):
         #self.display()
         #meas_1, meas_2 = measure_raw()
         
-        meas_1, meas_2 = measure_ref(self.ref_1,self.ref_2)     
+        meas_1, meas_2 = measure_ref(self.ref_1,self.ref_2)
 
         self.ydata = np.concatenate((np.delete(meas_1,[0,1]),meas_2), axis=None) # subtract dark current
         self.h2.setData(self.ydata)
