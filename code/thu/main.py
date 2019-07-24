@@ -1,5 +1,6 @@
 import sys
 import os
+from time import sleep
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 
@@ -16,6 +17,7 @@ import numpy as np
 import csv
 from PIL import Image
 import RPi.GPIO as GPIO
+import cv2
 
 
 
@@ -42,20 +44,14 @@ TRIGGER_PIN = 16
 
 class MainWindow(QtWidgets.QMainWindow):
     camera_on = True  #boolean to store toggle state of camera capture
+    cam_frame_count = 0
     def __init__(self):
         # initialize all background functions
-        self.get_datetime()
-
-        self.data_dir = "/data"
-        self.session_datetime = self.current_datetime
-        self.session_data_dir = self.data_dir + str(self.session_datetime)
-        self.setup_session_dir()
-
         super(MainWindow, self).__init__()
         self.ui = Ui_SpectrometerGUI()
         self.ui.setupUi(self)
-        self.ui.ui_session_data_dir = self.session_data_dir
-        self.ui.ui_session_datetime = self.session_datetime
+        self.get_datetime()
+        
         
         # initialize list of all child dialogs 
         self.dialogs = list()
@@ -76,12 +72,20 @@ class MainWindow(QtWidgets.QMainWindow):
         GPIO.setup(TRIGGER_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(TRIGGER_PIN, GPIO.FALLING, callback=self.trigger_pressed_cb, bouncetime=200)
 
+        self.setup_session_dir()
+
     # stop the GUI
     def __del__(self):
         print("deleting Main Window")
 
     def setup_session_dir(self):
         try:
+            print("Setting up data directory")
+            self.data_dir = "data/"
+            self.session_datetime = self.rtc_thread.get_datetime()
+            self.session_data_dir = self.data_dir + str(self.session_datetime)
+            self.ui.ui_session_data_dir = self.session_data_dir
+            self.ui.ui_session_datetime = self.session_datetime
             os.mkdir(self.session_data_dir)
             if os.getcwd().split('/')[-1] != str(self.session_datetime):
                 os.chdir(self.session_data_dir)
@@ -96,6 +100,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def trigger_pressed_cb(self, trigger_pin=None):
         try:
+            trigger_timestamp = self.current_datetime
             print("Trigger pin {} pressed".format(trigger_pin))
             """
             print(self.ui.ydata)
@@ -109,17 +114,34 @@ class MainWindow(QtWidgets.QMainWindow):
             # save timestamp, gps and spectral data in csv
             with open("measurements.csv", mode='a') as data_csv:
                 data_writer = csv.writer(data_csv, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                data_writer.writerow([str(self.current_datetime), self.curent_location, self.ui.ydata])
+                data_writer.writerow([str(trigger_timestamp), self.curent_location, self.ui.ydata])
             # start grabbing camera frames
-            if (not self.camera_on):
-                self.camera_on = True
-                self.toggle_camera()
+            self.camera_thread = Camera()
+            self.camera_thread.camera_on = True
+            self.camera_thread.start()
+            self.camera_thread.frame_updated.connect(self.update_frame)
+            while self.cam_frame_count < 20:
+                pass
+            self.cam_frame_count = 0
+            self.camera_thread.camera_on = False
+            cv2.imwrite("cap_{}.png".format(trigger_timestamp), self.cam_frame_updated)
             # most recent camera frame is stored in variable camera_frame
             # save this numpy array to file
             # np.save(self.camera_frame)
-            self.camera_on = False # turn off camera at the end of the capturing process
+            
         except Exception as e:
             print("main - trigger_pressed_cb - Exception:", e)
+
+
+
+    
+    def update_frame(self, frame):
+        self.cam_frame_updated = frame
+        self.cam_frame_count = self.cam_frame_count + 1
+        
+            
+
+
 
     # function to execute a thread which constantly asks for real time
     def get_datetime(self):
@@ -166,6 +188,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.current_datetime = time_str
         self.ui.time_label.setText("Current date time: {}".format(time_str))
         self.ui.time_label.adjustSize()
+        #self.setup_session_dir()
     
     # function to display GPS location on GUI label gps_label
     def show_location(self, gps_str):

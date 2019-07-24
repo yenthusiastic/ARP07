@@ -15,6 +15,7 @@ class RTC(QThread):
     default_I2C_addr = 0x68
     #pyqtSignal to store time data of this thread to be emitted during running
     time_updated = pyqtSignal(str, name='time_updated')
+    date_time_str = None
     def __init__(self):
         QThread.__init__(self)
         # initialize RTC
@@ -36,9 +37,12 @@ class RTC(QThread):
                 # get date time from RTC
                 time_str = str(self.ds3231.read_datetime()).split(".")[0]
                 #print('RTC time: %s' % time_str)
-
+                self.date_time_str = time_str
                 # emit time data to the GUI thread that is calling this thread
                 self.time_updated.emit(str(time_str))
             else:
                 self.time_updated.emit(str(""))
             time.sleep(1.0)
+
+    def get_datetime(self):
+        return self.date_time_str

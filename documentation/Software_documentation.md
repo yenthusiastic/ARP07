@@ -156,7 +156,15 @@ NOTE: Initially `openCV` was compiled successfully and tested working with `pyth
 ```
 python3 -m site --user-site
 ```
-With user pi, this command returns `/home/pi/.local/lib/python3.5/site-packages` where cv2 is saved. Using root (sudo) the command returns `/root/.local/lib/python3.5/site-packages`. However, this directory does not exist. After creating the directory, cv2 from user pi can be copied over (symlink should also work).
+With user pi, this command returns `/home/pi/.local/lib/python3.5/site-packages` where cv2 is saved. Using root (sudo) the command returns `/root/.local/lib/python3.5/site-packages`. However, this directory does not exist. To create this folder:
+```
+sudo mkdir root/.local
+sudo mkdir root/.local/lib
+sudo mkdir root/.local/lib/python3.5
+sudo mkdir root/.local/lib/python3.5/site-packages
+```
+Then, cv2 from user pi can be copied over (symlink should also work).
+
 
 #### 2.5. Installing additional libraries:
 NOTE: To avoid long installing time, the complete OS image with PyQt5, Seabreeze and OpenCV and all dependencies was made on 12.07.19. See instructions [here](image_instructions.md).

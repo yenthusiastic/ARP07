@@ -41,7 +41,7 @@ class GPS(QThread):
             if self.gps is not None:
                 self.gps.update()
                 if not self.gps.has_fix:
-                    print('Waiting for GPS data...')
+                    #print('Waiting for GPS data...')
                     gps_str = ""
                     self.gps_updated.emit(str(gps_str))
                 else:
